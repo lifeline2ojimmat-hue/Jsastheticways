@@ -187,6 +187,20 @@
     margin-bottom:32px;
   }
   .hero-ctas{display:flex; gap:16px; margin-bottom:52px; flex-wrap:wrap;}
+  .btn, .checkout-btn, .buy-btn, .add-btn, .promo-cta{
+    position:relative; overflow:hidden;
+  }
+  .btn::after, .checkout-btn::after, .buy-btn::after, .add-btn::after, .promo-cta::after{
+    content:"";
+    position:absolute; top:0; left:-120%; width:60%; height:100%;
+    background:linear-gradient(115deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform:skewX(-20deg);
+    transition:left .55s ease;
+    pointer-events:none;
+  }
+  .btn:hover::after, .checkout-btn:hover::after, .buy-btn:hover::after, .add-btn:hover::after, .promo-cta:hover::after{
+    left:130%;
+  }
   .btn{
     display:inline-flex; align-items:center; gap:8px;
     padding:15px 28px;
@@ -648,6 +662,15 @@
   .no-results{
     grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--ink-faint); font-size:14px;
   }
+  .load-more-btn{
+    display:none;
+    margin:36px auto 0;
+    padding:14px 40px;
+    background:transparent; border:1px solid var(--ink); color:var(--ink);
+    font-size:12px; letter-spacing:0.1em; text-transform:uppercase; font-weight:600;
+    cursor:pointer; transition:all .2s;
+  }
+  .load-more-btn:hover{background:var(--ink); color:#0a0808;}
   @media(max-width:900px){
     .shop-toolbar{flex-direction:column; align-items:stretch;}
     .search-box input{width:100%;}
@@ -787,6 +810,11 @@
     border:1px solid var(--line); background:transparent; color:var(--ink-dim); cursor:pointer;
   }
   .order-actions button:hover{border-color:var(--blood); color:var(--ink);}
+  .order-photo-btn{
+    display:block; text-align:center; padding:9px 0; font-size:11px; letter-spacing:0.05em; text-transform:uppercase;
+    border:1px dashed var(--line); color:var(--ink-dim); cursor:pointer; width:100%;
+  }
+  .order-photo-btn:hover{border-color:var(--blood); color:var(--ink);}
 
   .help-section{
     border-top:1px solid var(--line); background:var(--bg-alt); padding:70px 0;
@@ -990,6 +1018,9 @@
     }
   }
 </style>
+<!-- EmailJS: lets this static site email you an order notification without a backend.
+     Free sign-up at https://www.emailjs.com — then fill in EMAILJS_* constants further down. -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -1107,6 +1138,7 @@
         <button class="cat-tab" data-cat="graphic">Graphic</button>
         <button class="cat-tab" data-cat="washed">Washed</button>
         <button class="cat-tab" data-cat="backprint">Back Print</button>
+        <button class="cat-tab" data-cat="pants">Pants</button>
       </div>
       <div class="toolbar-right">
         <div class="search-box">
@@ -1122,6 +1154,489 @@
     </div>
 
     <div class="product-grid" id="productGrid">
+      <div class="product-card" data-category="graphic" data-price="899">
+        <div class="product-thumb">
+          <img src="assets/product-12.png" alt="Raspberry Graphic Longsleeve">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Raspberry Graphic Longsleeve</h3>
+          <div class="price">₹899</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(41)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="799">
+        <div class="product-thumb">
+          <img src="assets/product-13.jpeg" alt="Flip Studios Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Flip Studios Tee</h3>
+          <div class="price">₹799</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(63)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="washed" data-price="849">
+        <div class="product-thumb">
+          <img src="assets/product-14.png" alt="Time Stand Still Tie-Dye Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Time Stand Still Tie-Dye Tee</h3>
+          <div class="price">₹849</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.6</span><span class="rating-count">(58)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="799">
+        <div class="product-thumb">
+          <img src="assets/product-15.webp" alt="Veirdo Original Raglan Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Veirdo Original Raglan Tee</h3>
+          <div class="price">₹799</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.4</span><span class="rating-count">(47)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="949">
+        <div class="product-thumb">
+          <img src="assets/product-16.png" alt="Striped Rugby Polo">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Striped Rugby Polo</h3>
+          <div class="price">₹949</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(39)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="backprint" data-price="849">
+        <div class="product-thumb">
+          <img src="assets/product-17.webp" alt="Skull Back-Print Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Skull Back-Print Tee</h3>
+          <div class="price">₹849</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.7</span><span class="rating-count">(92)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="799">
+        <div class="product-thumb">
+          <img src="assets/product-18.jpeg" alt="Playing Victim Crop Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Playing Victim Crop Tee</h3>
+          <div class="price">₹799</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(28)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="999">
+        <div class="product-thumb">
+          <img src="assets/product-19.png" alt="Black Excellence Shirt">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Black Excellence Shirt</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.6</span><span class="rating-count">(54)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="backprint" data-price="849">
+        <div class="product-thumb">
+          <img src="assets/product-20.webp" alt="Spider-Man Back-Print Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Spider-Man Back-Print Tee</h3>
+          <div class="price">₹849</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.8</span><span class="rating-count">(121)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="899">
+        <div class="product-thumb">
+          <img src="assets/product-21.png" alt="Mesh 90 Jersey Polo">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Mesh 90 Jersey Polo</h3>
+          <div class="price">₹899</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(36)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="backprint" data-price="849">
+        <div class="product-thumb">
+          <img src="assets/product-22.webp" alt="Veirdo Repeat Back-Print Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Veirdo Repeat Back-Print Tee</h3>
+          <div class="price">₹849</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(67)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="washed" data-price="849">
+        <div class="product-thumb">
+          <img src="assets/product-23.png" alt="CRIIX Washed Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>CRIIX Washed Tee</h3>
+          <div class="price">₹849</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.4</span><span class="rating-count">(45)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="graphic" data-price="749">
+        <div class="product-thumb">
+          <img src="assets/product-24.webp" alt="Warning Graphic Tee">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Warning Graphic Tee</h3>
+          <div class="price">₹749</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(33)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1399">
+        <div class="product-thumb">
+          <img src="assets/product-25.jpeg" alt="Wide Leg Jeans - Dark Wash">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Wide Leg Jeans - Dark Wash</h3>
+          <div class="price">₹1399</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(58)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1399">
+        <div class="product-thumb">
+          <img src="assets/product-26.png" alt="Wide Leg Jeans - Sun Bleached">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Wide Leg Jeans - Sun Bleached</h3>
+          <div class="price">₹1399</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.6</span><span class="rating-count">(64)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1349">
+        <div class="product-thumb">
+          <img src="assets/product-27.png" alt="Wide Leg Jeans - Light Blue">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Wide Leg Jeans - Light Blue</h3>
+          <div class="price">₹1349</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.4</span><span class="rating-count">(42)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1449">
+        <div class="product-thumb">
+          <img src="assets/product-28.png" alt="Ripped Wide Leg Jeans">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Ripped Wide Leg Jeans</h3>
+          <div class="price">₹1449</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(51)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1349">
+        <div class="product-thumb">
+          <img src="assets/product-29.png" alt="Black Wide Leg Jeans">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Black Wide Leg Jeans</h3>
+          <div class="price">₹1349</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.6</span><span class="rating-count">(73)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="999">
+        <div class="product-thumb">
+          <img src="assets/product-30.webp" alt="Khaki Track Pants">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Khaki Track Pants</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(29)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1399">
+        <div class="product-thumb">
+          <img src="assets/product-31.png" alt="Belted Wide Leg Jeans">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Belted Wide Leg Jeans</h3>
+          <div class="price">₹1399</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(47)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="999">
+        <div class="product-thumb">
+          <img src="assets/product-32.webp" alt="Brown Track Pants">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Brown Track Pants</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(24)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1349">
+        <div class="product-thumb">
+          <img src="assets/product-33.png" alt="Light Wash Belted Jeans">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Light Wash Belted Jeans</h3>
+          <div class="price">₹1349</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.4</span><span class="rating-count">(38)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card" data-category="pants" data-price="1249">
+        <div class="product-thumb">
+          <img src="assets/product-34.webp" alt="Navy Cargo Pants">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Navy Cargo Pants</h3>
+          <div class="price">₹1249</div>
+          <div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(44)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button>
+            <button class="size-pill" data-size="M">M</button>
+            <button class="size-pill selected" data-size="L">L</button>
+            <button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Product 1 -->
       <div class="product-card" data-category="oversized" data-price="799">
@@ -1370,954 +1885,6 @@
         </div>
       </div>
 
-      <!-- Product 12 -->
-      <div class="product-card" data-category="oversized" data-price="749">
-        <div class="product-thumb">
-          <span class="new-badge">New</span>
-          <img src="assets/product-12.png" alt="Blessed 07 Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Blessed 07 Tee</h3>
-          <div class="price">₹749</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(45)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- NEW PRODUCTS (13 onwards) -->
-
-      <!-- Product 13: Off-shoulder top woman -->
-      <div class="product-card" data-category="oversized" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-13.png" alt="Off Shoulder Knit Top">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Off Shoulder Knit Top</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★½</span><span class="rating-num">4.5</span><span class="rating-count">(50)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 14: Striped Black Shirt -->
-      <div class="product-card" data-category="graphic" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-14.png" alt="Black Striped Shirt">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Black Striped Shirt</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.0</span><span class="rating-count">(20)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 15: Textured Graphic Jeans -->
-      <div class="product-card" data-category="washed" data-price="1199">
-        <div class="product-thumb">
-          <img src="assets/product-15.png" alt="Textured Washed Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Textured Washed Jeans</h3>
-          <div class="price">₹1199</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(40)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 16: Blue Cap Striped Polo -->
-      <div class="product-card" data-category="graphic" data-price="749">
-        <div class="product-thumb">
-          <img src="assets/product-16.png" alt="Blue Cap Striped Polo">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Blue Cap Striped Polo</h3>
-          <div class="price">₹749</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(35)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 17: Purple Time Stand Still Tee -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-17.png" alt="Time Stand Still Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Time Stand Still Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(28)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 18: 90s Mesh Jersey -->
-      <div class="product-card" data-category="graphic" data-price="649">
-        <div class="product-thumb">
-          <img src="assets/product-18.png" alt="90s Mesh Jersey">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>90s Mesh Jersey</h3>
-          <div class="price">₹649</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.0</span><span class="rating-count">(12)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 19: Purple Graphic Tee Woman -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-19.png" alt="Purple Unleash Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Purple Unleash Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(18)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 20: My Body Not Yours Top -->
-      <div class="product-card" data-category="graphic" data-price="599">
-        <div class="product-thumb">
-          <img src="assets/product-20.png" alt="My Body Not Yours Top">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>My Body Not Yours Top</h3>
-          <div class="price">₹599</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.8</span><span class="rating-count">(60)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 21: Playing Victim White Tee -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-21.png" alt="Playing Victim White Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Playing Victim White Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(25)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 22: Flip Blue Tee -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-22.png" alt="Flip Blue Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Flip Blue Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(80)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 23: Black Washed Graphic Tee (W33D) -->
-      <div class="product-card" data-category="washed" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-23.png" alt="W33D Washed Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>W33D Washed Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(45)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 24: Flip Studio Blue Tee -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-24.png" alt="Flip Studio Blue Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Flip Studio Blue Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(15)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 25: Light Wash Jeans -->
-      <div class="product-card" data-category="washed" data-price="1099">
-        <div class="product-thumb">
-          <img src="assets/product-25.png" alt="Light Wash Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Light Wash Jeans</h3>
-          <div class="price">₹1099</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.0</span><span class="rating-count">(30)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 26: Ripped Blue Jeans -->
-      <div class="product-card" data-category="washed" data-price="1099">
-        <div class="product-thumb">
-          <img src="assets/product-26.png" alt="Ripped Blue Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Ripped Blue Jeans</h3>
-          <div class="price">₹1099</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(50)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 27: Black Baggy Jeans -->
-      <div class="product-card" data-category="washed" data-price="1099">
-        <div class="product-thumb">
-          <img src="assets/product-27.png" alt="Black Baggy Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Black Baggy Jeans</h3>
-          <div class="price">₹1099</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(65)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 28: AC Milan Jersey -->
-      <div class="product-card" data-category="graphic" data-price="999">
-        <div class="product-thumb">
-          <img src="assets/product-28.png" alt="AC Milan Jersey">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>AC Milan Jersey</h3>
-          <div class="price">₹999</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.8</span><span class="rating-count">(95)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 29: Barcelona Jersey -->
-      <div class="product-card" data-category="graphic" data-price="999">
-        <div class="product-thumb">
-          <img src="assets/product-29.png" alt="Barcelona Jersey">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Barcelona Jersey</h3>
-          <div class="price">₹999</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.9</span><span class="rating-count">(110)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 30: Portugal Jersey -->
-      <div class="product-card" data-category="graphic" data-price="999">
-        <div class="product-thumb">
-          <img src="assets/product-30.png" alt="Portugal Jersey">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Portugal Jersey</h3>
-          <div class="price">₹999</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.7</span><span class="rating-count">(85)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 31: Make Move Take Risk Jeans -->
-      <div class="product-card" data-category="washed" data-price="999">
-        <div class="product-thumb">
-          <img src="assets/product-31.png" alt="Make Move Take Risk Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Make Move Take Risk Jeans</h3>
-          <div class="price">₹999</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.0</span><span class="rating-count">(22)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 32: Dark Blue Vintage Jeans -->
-      <div class="product-card" data-category="washed" data-price="1099">
-        <div class="product-thumb">
-          <img src="assets/product-32.png" alt="Dark Blue Vintage Jeans">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Dark Blue Vintage Jeans</h3>
-          <div class="price">₹1099</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(40)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 33: Blessed 07 Tee (New) -->
-      <div class="product-card" data-category="graphic" data-price="699">
-        <div class="product-thumb">
-          <img src="assets/product-33.png" alt="Blessed 07 Ringer Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Blessed 07 Ringer Tee</h3>
-          <div class="price">₹699</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.6</span><span class="rating-count">(35)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 34: LA Sweatshirt -->
-      <div class="product-card" data-category="graphic" data-price="1299">
-        <div class="product-thumb">
-          <img src="assets/product-34.png" alt="LA Quarter Zip Sweatshirt">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>LA Quarter Zip Sweatshirt</h3>
-          <div class="price">₹1299</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(52)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 35: Beige Track Pants -->
-      <div class="product-card" data-category="oversized" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-35.png" alt="Beige Side Stripe Pants">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Beige Side Stripe Pants</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(25)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 36: Brown Track Pants -->
-      <div class="product-card" data-category="oversized" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-36.png" alt="Brown Track Pants">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Brown Track Pants</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(12)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 37: Veirdo Sand Tee Back -->
-      <div class="product-card" data-category="backprint" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-37.png" alt="Veirdo Sand Back Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Veirdo Sand Back Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(50)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 38: Veirdo Blue Back Tee -->
-      <div class="product-card" data-category="backprint" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-38.png" alt="Veirdo Blue Back Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Veirdo Blue Back Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(45)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 39: Warning Green Tee -->
-      <div class="product-card" data-category="graphic" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-39.png" alt="Warning Green Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Warning Green Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(15)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 40: Dark Blue Cargo Pants -->
-      <div class="product-card" data-category="oversized" data-price="1199">
-        <div class="product-thumb">
-          <img src="assets/product-40.png" alt="Dark Blue Cargo Pants">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Dark Blue Cargo Pants</h3>
-          <div class="price">₹1199</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.3</span><span class="rating-count">(30)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 41: Veirdo Green Raglan -->
-      <div class="product-card" data-category="graphic" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-41.png" alt="Veirdo Green Raglan Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Veirdo Green Raglan Tee</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(48)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 42: Skull Backprint Sand Tee -->
-      <div class="product-card" data-category="backprint" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-42.png" alt="Skull Backprint Sand Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Skull Backprint Sand Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.2</span><span class="rating-count">(20)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 43: Spider-Man Backprint Black Tee -->
-      <div class="product-card" data-category="backprint" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-43.png" alt="Spider-Man Black Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Spider-Man Black Tee</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.8</span><span class="rating-count">(70)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 44: FAAAAHHH! Black Acid Wash -->
-      <div class="product-card" data-category="washed" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-44.png" alt="FAAAAHHH! Black Acid Wash">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>FAAAAHHH! Black Acid Wash</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(80)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 45: Acid Bath Clown Washed -->
-      <div class="product-card" data-category="washed" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-45.png" alt="Acid Bath Clown Washed">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Acid Bath Clown Washed</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(40)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 46: Black Parade Washed Tee -->
-      <div class="product-card" data-category="washed" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-46.png" alt="Black Parade Washed Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Black Parade Washed Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.6</span><span class="rating-count">(75)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 47: LA 32 Maroon Tee -->
-      <div class="product-card" data-category="oversized" data-price="749">
-        <div class="product-thumb">
-          <img src="assets/product-47.png" alt="LA 32 Maroon Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>LA 32 Maroon Tee</h3>
-          <div class="price">₹749</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.0</span><span class="rating-count">(18)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 48: The Original Veirdo Sand Tee (New) -->
-      <div class="product-card" data-category="graphic" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-48.png" alt="Original Veirdo Sand Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Original Veirdo Sand Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.7</span><span class="rating-count">(65)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 49: Original Veirdo Green Tee -->
-      <div class="product-card" data-category="graphic" data-price="849">
-        <div class="product-thumb">
-          <img src="assets/product-49.png" alt="Original Veirdo Green Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Original Veirdo Green Tee</h3>
-          <div class="price">₹849</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.6</span><span class="rating-count">(55)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 50: Cryptic Wing Black Washed Tee -->
-      <div class="product-card" data-category="washed" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-50.png" alt="Cryptic Wing Black Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Cryptic Wing Black Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(35)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 51: U Gotta Walk In Da Room (Backprint) -->
-      <div class="product-card" data-category="backprint" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-51.png" alt="U Gotta Walk In Da Room Back Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>U Gotta Walk In Da Room Back Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.9</span><span class="rating-count">(90)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 52: Nirvana Yellow Backprint Tee -->
-      <div class="product-card" data-category="backprint" data-price="899">
-        <div class="product-thumb">
-          <img src="assets/product-52.png" alt="Nirvana Yellow Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Nirvana Yellow Tee</h3>
-          <div class="price">₹899</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.8</span><span class="rating-count">(100)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 53: Cryptic Cyber Skull Tee -->
-      <div class="product-card" data-category="washed" data-price="799">
-        <div class="product-thumb">
-          <img src="assets/product-53.png" alt="Cryptic Cyber Skull Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Cryptic Cyber Skull Tee</h3>
-          <div class="price">₹799</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.4</span><span class="rating-count">(42)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Product 54: Gods Favourite Red Text -->
-      <div class="product-card" data-category="graphic" data-price="749">
-        <div class="product-thumb">
-          <img src="assets/product-54.png" alt="Gods Favourite Red Text Tee">
-          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
-        </div>
-        <div class="product-info">
-          <h3>Gods Favourite Red Text Tee</h3>
-          <div class="price">₹749</div><div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.1</span><span class="rating-count">(55)</span></div>
-          <div class="size-row">
-            <button class="size-pill" data-size="S">S</button>
-            <button class="size-pill" data-size="M">M</button>
-            <button class="size-pill selected" data-size="L">L</button>
-            <button class="size-pill" data-size="XL">XL</button>
-          </div>
-          <div class="btn-row">
-            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
-            <button class="buy-btn">Buy Now</button>
-          </div>
-        </div>
-      </div>
 
     </div>
   </section>
@@ -2407,7 +1974,7 @@
             <h4>JS ASTHETIC WAYS</h4>
             <p>More than just a brand. It's a lifestyle. It's your aesthetic. Wear it bold.</p>
             <div class="socials">
-              <a href="https://www.instagram.com/" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+              <a href="https://www.instagram.com/life_line2.o___" target="_blank" title="Instagram"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
               <a href="https://wa.me/9707286520" target="_blank" title="WhatsApp"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4A8.6 8.6 0 0 1 3 12a8.4 8.4 0 0 1 14.3-6"/><path d="M21 3v6h-6"/></svg></a>
               <a href="mailto:lifeline2.ojimmat@gmail.com" title="Email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></a>
             </div>
@@ -2453,23 +2020,6 @@
       </div>
     </div>
   </footer>
-  <div class="modal-overlay" id="collectionsModal">
-    <div class="modal-panel">
-      <div class="modal-head">
-        <div class="modal-head-text">
-          <div class="eyebrow">Full Collection</div>
-          <h3>More Drops From JS Asthetic Ways</h3>
-        </div>
-        <button type="button" class="modal-close" id="modalClose" aria-label="Close">
-          <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="modal-grid" id="modalGrid"></div>
-      </div>
-    </div>
-  </div>
-
   <!-- Cart Drawer -->
   <div class="drawer-overlay" id="cartOverlay">
     <div class="drawer">
@@ -2502,6 +2052,11 @@
             <label class="pay-option selected"><input type="radio" name="payMethod" value="COD" checked> Cash on Delivery (COD)</label>
             <label class="pay-option"><input type="radio" name="payMethod" value="UPI"> UPI (GPay / PhonePe / Paytm)</label>
             <label class="pay-option"><input type="radio" name="payMethod" value="Card/Net Banking/EMI"> Card / Net Banking / EMI</label>
+          </div>
+          <div id="upiQrBox" style="display:none; text-align:center; margin-top:14px; padding:16px; border:1px solid var(--line); background:var(--card);">
+            <img id="upiQrImg" src="" alt="UPI QR Code" style="width:160px; height:160px; margin:0 auto 10px; display:block;">
+            <div style="font-size:12px; color:var(--ink-dim);">Scan to pay <strong id="upiQrAmount">₹0</strong></div>
+            <div style="font-size:11px; color:var(--ink-faint); margin-top:4px;">UPI ID: <span id="upiVpaText">yourupi@bank</span></div>
           </div>
         </div>
 
@@ -2607,48 +2162,18 @@
       cards.forEach(function(c){ io.observe(c); });
     })();
 
-    // Collections modal: move hidden "extra" items into the modal grid,
-    // then open it with a staggered entrance animation whenever it's triggered.
+    // "View Collection" / "Collections" now scroll straight to the shop grid,
+    // which already has search, category filters, sorting, and Load More —
+    // a separate modal duplicate isn't needed and would just show empty
+    // once there are no separately-hidden "extra" items.
     (function(){
-      var overlay = document.getElementById('collectionsModal');
-      var grid = document.getElementById('modalGrid');
-      var closeBtn = document.getElementById('modalClose');
       var triggers = Array.from(document.querySelectorAll('#viewAllBtn, a[href="#collections"]'));
-
-      // Move the extra product cards out of the hidden main-grid slot
-      // and into the modal, once, on load.
-      document.querySelectorAll('.product-card.extra').forEach(function(card){
-        card.classList.remove('extra');
-        card.classList.remove('show');
-        grid.appendChild(card);
-      });
-
-      function openModal(e){
-        if(e) e.preventDefault();
-        overlay.classList.add('open');
-        document.body.classList.add('modal-locked');
-        playSound('swoosh');
-        var cards = grid.querySelectorAll('.product-card');
-        cards.forEach(function(card, i){
-          card.classList.remove('reveal');
-          void card.offsetWidth;
-          card.style.animationDelay = (i * 0.06) + 's';
-          card.classList.add('reveal');
+      triggers.forEach(function(t){
+        t.addEventListener('click', function(e){
+          e.preventDefault();
+          playSound('swoosh');
+          document.getElementById('shop').scrollIntoView({behavior:'smooth'});
         });
-      }
-      function closeModal(){
-        overlay.classList.remove('open');
-        document.body.classList.remove('modal-locked');
-        playSound('swoosh');
-      }
-
-      triggers.forEach(function(t){ t.addEventListener('click', openModal); });
-      closeBtn.addEventListener('click', closeModal);
-      overlay.addEventListener('click', function(e){
-        if(e.target === overlay) closeModal();
-      });
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape' && overlay.classList.contains('open')) closeModal();
       });
     })();
     // Fade up the About section pieces as they scroll into view
@@ -2667,14 +2192,39 @@
 
     // ============ SOUND EFFECTS ============
     var SOUNDS_ENABLED = true;
+    var SOUNDS = {
+      addToCart: new Audio('assets/sounds/add-to-cart.mp3'),
+      checkout: new Audio('assets/sounds/checkout-success.mp3'),
+      wishlist: new Audio('assets/sounds/wishlist.mp3'),
+      coupon: new Audio('assets/sounds/coupon-applied.mp3'),
+      error: new Audio('assets/sounds/error.mp3'),
+      swoosh: new Audio('assets/sounds/swoosh.mp3'),
+      tick: new Audio('assets/sounds/tick.mp3'),
+      remove: new Audio('assets/sounds/remove.mp3'),
+      toggle: new Audio('assets/sounds/toggle.mp3'),
+      click: new Audio('assets/sounds/click.mp3')
+    };
+    Object.keys(SOUNDS).forEach(function(key){
+      SOUNDS[key].preload = 'auto';
+      SOUNDS[key].volume = 0.5;
+    });
     function playSound(key){
       if(!SOUNDS_ENABLED) return;
-      console.log("Playing sound: " + key);
+      try {
+        var s = SOUNDS[key];
+        if(!s) return;
+        s.currentTime = 0;
+        s.play().catch(function(){ /* ignored: browser blocked autoplay before interaction */ });
+      } catch(e){}
     }
 
     // ============ CART & WISHLIST SYSTEM ============
-    var WHATSAPP_NUMBER = "9707286520"; // <-- change this to your real number
-    var ADMIN_PASSWORD = "admin123";
+    // NOTE: WhatsApp numbers need the country code with no + or spaces (e.g. 91XXXXXXXXXX for India)
+    var WHATSAPP_NUMBER = "919707286520";
+    // SECURITY WARNING: this is a client-side-only check. Anyone can view this
+    // password in the page source or browser dev tools — it does NOT protect
+    // real order data. Do not rely on this for anything sensitive.
+    var ADMIN_PASSWORD = "admin123"; // <-- change this, but understand it is not truly secure
 
     var cart = JSON.parse(localStorage.getItem('js_cart') || '[]');
     var wishlist = JSON.parse(localStorage.getItem('js_wishlist') || '[]');
@@ -2935,11 +2485,35 @@
       });
     })();
 
+    // UPI VPA — replace with your real UPI ID (e.g. "9707286520@ybl" or "yourname@okhdfcbank")
+    // Until you set this, the QR code will not point to a real payment address.
+    var UPI_VPA = "yourupi@bank";
+    var UPI_PAYEE_NAME = "JS Asthetic Ways";
+
+    function updateUpiQr(){
+      var totals = computeTotals();
+      var amount = totals.total;
+      var upiString = 'upi://pay?pa=' + encodeURIComponent(UPI_VPA) + '&pn=' + encodeURIComponent(UPI_PAYEE_NAME) + '&am=' + amount + '&cu=INR';
+      var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(upiString);
+      document.getElementById('upiQrImg').src = qrImgUrl;
+      document.getElementById('upiQrAmount').textContent = '\u20B9' + amount;
+      document.getElementById('upiVpaText').textContent = UPI_VPA;
+    }
+
     (function(){
       document.querySelectorAll('.pay-option').forEach(function(opt){
         opt.addEventListener('click', function(){
           document.querySelectorAll('.pay-option').forEach(function(o){ o.classList.remove('selected'); });
           opt.classList.add('selected');
+          playSound('click');
+          var qrBox = document.getElementById('upiQrBox');
+          var val = opt.querySelector('input').value;
+          if(val === 'UPI'){
+            qrBox.style.display = 'block';
+            updateUpiQr();
+          } else {
+            qrBox.style.display = 'none';
+          }
         });
       });
     })();
@@ -2971,6 +2545,12 @@
                 '<button data-track="' + order.id + '">Track Order</button>' +
                 '<button data-return="' + order.id + '">Return / Exchange</button>' +
               '</div>' +
+              '<div class="order-actions" style="margin-top:8px;">' +
+                '<label class="order-photo-btn" for="photo-' + order.id + '">Upload Delivery Photo' +
+                  '<input type="file" accept="image/*" id="photo-' + order.id + '" data-photo="' + order.id + '" style="display:none;">' +
+                '</label>' +
+              '</div>' +
+              '<div class="order-photo-preview" id="preview-' + order.id + '"></div>' +
             '</div>';
           }).join('');
         }
@@ -2985,6 +2565,26 @@
             playSound('swoosh');
             var msg = encodeURIComponent('Hi, I would like to request a return/exchange for Order #' + b.getAttribute('data-return') + '.');
             window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
+          });
+        });
+        body.querySelectorAll('[data-photo]').forEach(function(input){
+          input.addEventListener('change', function(){
+            var orderId = input.getAttribute('data-photo');
+            var file = input.files[0];
+            if(!file) return;
+            var reader = new FileReader();
+            reader.onload = function(e){
+              var preview = document.getElementById('preview-' + orderId);
+              preview.innerHTML = '<img src="' + e.target.result + '" alt="Delivery photo" style="max-width:100%; border-radius:4px; margin-top:10px;">' +
+                '<button type="button" class="checkout-btn" style="margin-top:8px;" data-send-photo="' + orderId + '">Send This Photo on WhatsApp</button>';
+              playSound('click');
+              preview.querySelector('[data-send-photo]').addEventListener('click', function(){
+                playSound('swoosh');
+                var msg = encodeURIComponent('Hi! Here is my delivery photo for Order #' + orderId + '. (Please attach the photo you just selected in this chat.)');
+                window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
+              });
+            };
+            reader.readAsDataURL(file);
           });
         });
       }
@@ -3052,6 +2652,38 @@
       document.body.classList.remove('modal-locked');
     });
 
+    // ============ OWNER EMAIL NOTIFICATION (optional, via EmailJS) ============
+    // A static site cannot run its own server, so this uses EmailJS (free tier)
+    // to send YOU an email whenever a customer places an order — no backend needed.
+    // Setup (5 min, one-time):
+    //   1. Sign up free at https://www.emailjs.com
+    //   2. Add an Email Service (e.g. connect your Gmail) -> copy its Service ID
+    //   3. Create an Email Template with variables: order_id, items, total, address, payment -> copy its Template ID
+    //   4. Account -> General -> copy your Public Key
+    //   5. Paste all three below. Until then, this silently does nothing — WhatsApp still works as normal.
+    var EMAILJS_PUBLIC_KEY = "";   // <-- paste your EmailJS Public Key here
+    var EMAILJS_SERVICE_ID = "";   // <-- paste your EmailJS Service ID here
+    var EMAILJS_TEMPLATE_ID = "";  // <-- paste your EmailJS Template ID here
+    var OWNER_EMAIL = "lifeline2.ojimmat@gmail.com";
+
+    if(EMAILJS_PUBLIC_KEY && window.emailjs){
+      try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){}
+    }
+
+    function notifyOwnerByEmail(orderId, itemsText, total, address, payMethod){
+      if(!EMAILJS_PUBLIC_KEY || !EMAILJS_SERVICE_ID || !EMAILJS_TEMPLATE_ID || !window.emailjs) return;
+      try {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: OWNER_EMAIL,
+          order_id: orderId,
+          items: itemsText,
+          total: '\u20B9' + total,
+          address: address,
+          payment: payMethod
+        });
+      } catch(e){}
+    }
+
     (function(){
       var btn = document.getElementById('checkoutBtn');
       if(!btn) return;
@@ -3083,6 +2715,9 @@
         var msg = encodeURIComponent(lines.join('\n'));
         window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank');
         playSound('checkout');
+
+        var itemsSummary = cart.map(function(i){ return i.name + (i.size ? ' ('+i.size+')' : '') + ' x' + i.qty; }).join(', ');
+        notifyOwnerByEmail(orderId, itemsSummary, totals.total, address, payMethod);
 
         orders.push({
           id: orderId,
@@ -3143,41 +2778,73 @@
       if(!grid) return;
       var cards = Array.prototype.slice.call(grid.querySelectorAll('.product-card'));
       var activeCat = 'all';
+      var PAGE_SIZE = 12;
+      var visibleCount = PAGE_SIZE;
 
-      function applyFilters(){
+      var loadMoreBtn = document.createElement('button');
+      loadMoreBtn.type = 'button';
+      loadMoreBtn.className = 'load-more-btn';
+      loadMoreBtn.textContent = 'Load More';
+      grid.parentNode.insertBefore(loadMoreBtn, grid.nextSibling);
+
+      function getFiltered(){
         var query = searchInput.value.trim().toLowerCase();
-        var visible = cards.filter(function(card){
+        return cards.filter(function(card){
           var name = card.querySelector('h3').textContent.toLowerCase();
           var cat = card.getAttribute('data-category');
           var matchesCat = activeCat === 'all' || cat === activeCat;
           var matchesSearch = !query || name.indexOf(query) !== -1;
-          var show = matchesCat && matchesSearch;
-          card.style.display = show ? '' : 'none';
-          return show;
+          return matchesCat && matchesSearch;
+        });
+      }
+
+      function getSorted(list){
+        var sortVal = sortSelect.value;
+        if(sortVal === 'featured') return list;
+        return list.slice().sort(function(a, b){
+          var pa = parseInt(a.getAttribute('data-price'), 10);
+          var pb = parseInt(b.getAttribute('data-price'), 10);
+          return sortVal === 'low-high' ? pa - pb : pb - pa;
+        });
+      }
+
+      function render(){
+        var filtered = getSorted(getFiltered());
+
+        // hide everything first, then show only up to visibleCount, in the right order
+        cards.forEach(function(c){ c.style.display = 'none'; });
+        filtered.slice(0, visibleCount).forEach(function(card){
+          grid.appendChild(card);
+          card.style.display = '';
         });
 
         var existingMsg = grid.querySelector('.no-results');
         if(existingMsg) existingMsg.remove();
-        if(visible.length === 0){
+        if(filtered.length === 0){
           var msg = document.createElement('div');
           msg.className = 'no-results';
           msg.textContent = 'No products match your search.';
           grid.appendChild(msg);
         }
 
-        applySort(visible);
+        if(filtered.length > visibleCount){
+          loadMoreBtn.style.display = 'block';
+          loadMoreBtn.textContent = 'Load More (' + (filtered.length - visibleCount) + ' more)';
+        } else {
+          loadMoreBtn.style.display = 'none';
+        }
       }
 
-      function applySort(visible){
-        var sortVal = sortSelect.value;
-        if(sortVal === 'featured') return;
-        var sorted = visible.slice().sort(function(a, b){
-          var pa = parseInt(a.getAttribute('data-price'), 10);
-          var pb = parseInt(b.getAttribute('data-price'), 10);
-          return sortVal === 'low-high' ? pa - pb : pb - pa;
-        });
-        sorted.forEach(function(card){ grid.appendChild(card); });
+      function applyFilters(){
+        visibleCount = PAGE_SIZE;
+        render();
       }
+
+      loadMoreBtn.addEventListener('click', function(){
+        playSound('click');
+        visibleCount += PAGE_SIZE;
+        render();
+      });
 
       searchInput.addEventListener('input', applyFilters);
       sortSelect.addEventListener('change', function(){ playSound('tick'); applyFilters(); });
@@ -3190,6 +2857,8 @@
           applyFilters();
         });
       });
+
+      render();
     })();
 
     (function(){
@@ -3228,6 +2897,27 @@
         a.addEventListener('click', function(){
           links.classList.remove('mobile-open');
           toggle.classList.remove('open');
+        });
+      });
+    })();
+
+    // 3D tilt effect on product cards — mouse-tracked perspective rotation for a premium feel.
+    // (Real 3D product models aren't available for these photos, so this simulates
+    // depth using the flat product image, which still gives a satisfying tilt-on-hover effect.)
+    (function(){
+      if(window.matchMedia && window.matchMedia('(hover: none)').matches) return; // skip on touch devices
+      document.querySelectorAll('.product-card').forEach(function(card){
+        card.style.transformStyle = 'preserve-3d';
+        card.addEventListener('mousemove', function(e){
+          var rect = card.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          var rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+          var rotateX = -((y - rect.height / 2) / (rect.height / 2)) * 6;
+          card.style.transform = 'perspective(800px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
+        });
+        card.addEventListener('mouseleave', function(){
+          card.style.transform = '';
         });
       });
     })();
