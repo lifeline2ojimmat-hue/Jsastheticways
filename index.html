@@ -3206,7 +3206,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
   }
   /* One capture handler controls the shopping buttons. This also catches dynamically-created Collection cards. */
   document.addEventListener('click',function(e){
-    var btn=e.target.closest('button.add-btn,button.buy-btn,button.wish,button.size-pill');
+    var btn=e.target.closest('button.add-btn,button.buy-btn,button.size-pill');
     if(btn){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();action(btn);return;}
   },true);
 
@@ -3291,7 +3291,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
     return item;
   }
 
-  function wishlist(card,button){
+  function toggleWishlistItem(card,button){
     var item=productFrom(card);
     if(!item) return;
     var i=wishlist.findIndex(function(x){return x.id===item.id;});
@@ -3340,7 +3340,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
       return;
     }
     if(button.classList.contains('wish')){
-      wishlist(card,button);
+      toggleWishlistItem(card,button);
       return;
     }
     if(button.classList.contains('buy-btn')){
@@ -3397,5 +3397,39 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 })();
 </script>
 
+<script id="wishlist-final-fix">
+(function(){
+  'use strict';
+  function sound(k){try{if(typeof playSound==='function')playSound(k||'click')}catch(e){}}
+  function toast(m){try{if(typeof showToast==='function')showToast(m)}catch(e){}}
+  function product(card){
+    if(typeof getProductFromCard==='function') return getProductFromCard(card);
+    var n=card.querySelector('h3'), p=card.querySelector('.price'), im=card.querySelector('img'), z=card.querySelector('.size-pill.selected');
+    return {id:(n?n.textContent.trim():'Item')+(z?' - '+z.dataset.size:''),name:n?n.textContent.trim():'Item',size:z?z.dataset.size:null,price:p?parseInt(p.textContent.replace(/\D/g,''),10)||0:0,img:im?im.src:''};
+  }
+  function toggle(card,w){
+    var item=product(card), i=wishlist.findIndex(function(x){return x.id===item.id;});
+    if(i===-1){wishlist.push(item);w.classList.add('liked');sound('wishlist');toast(item.name+' added to wishlist');}
+    else{wishlist.splice(i,1);w.classList.remove('liked');sound('remove');toast(item.name+' removed from wishlist');}
+    localStorage.setItem('js_wishlist',JSON.stringify(wishlist));
+    if(typeof updateWishlistCount==='function')updateWishlistCount();
+    if(typeof renderWishlist==='function')renderWishlist();
+  }
+  document.addEventListener('click',function(e){
+    var w=e.target.closest('.wish');
+    if(!w)return;
+    var card=w.closest('.product-card');
+    if(!card)return;
+    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+    toggle(card,w);
+  },true);
+  document.querySelectorAll('.wish').forEach(function(w){
+    var c=w.closest('.product-card');
+    if(c && wishlist.some(function(x){return x.id===product(c).id}))w.classList.add('liked');
+  });
+  var wi=document.getElementById('wishlistIcon');
+  if(wi)wi.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(typeof renderWishlist==='function')renderWishlist();if(typeof openDrawer==='function')openDrawer('wishlistOverlay');},true);
+})();
+</script>
 </body>
 </html>
