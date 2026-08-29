@@ -1,50 +1,28 @@
-# JS Asthetic Ways
+# JS ASTHETIC WAYS — GitHub Ready
 
-A single-page streetwear e-commerce landing site for **JS Asthetic Ways**, founded by JimmAT.
+## What's included
+- Product-detail interface opens when a product card is clicked.
+- Product detail has image, price, description, size, colour, quantity, Add to Cart, Buy Now, Wishlist and Share.
+- Products 35–45 added as a NEW DROP section using the uploaded product images.
+- Order cancellation button with required cancellation reason and optional details.
+- Cancellation is saved in browser localStorage and also opens WhatsApp with the cancellation reason.
+- Existing cart, wishlist, checkout and visual effects are kept.
 
-This is a **plain static website** — just HTML, CSS, and JavaScript. There is no build step, no framework, and no dependencies to install.
+## Change product prices
+Open `index.html` and find the product card you want. Update BOTH:
+1. `data-price="899"`
+2. `<div class="price">₹899</div>`
 
-## Project Structure
+Example: change 899 to 1299 in both places.
 
-```
-.
-├── index.html          # The entire site (markup, styles, and scripts in one file)
-└── assets/              # Product photos and logo
-    ├── logo.png
-    ├── product-1.png
-    ├── product-2.png
-    ├── ...
-    └── product-11.png
-```
+For Products 35–45, the current price is ₹899. Their cards are marked `new-drop-card`.
 
-`index.html` references images using relative paths like `assets/product-1.png`, so the `assets` folder **must stay in the same directory** as `index.html`, with those exact file names.
+## GitHub upload
+1. Create/open a GitHub repository.
+2. Click **Add file → Upload files**.
+3. Upload `index.html`, the `assets` folder, and this README.
+4. Commit the changes.
+5. For a live site: **Settings → Pages → Deploy from a branch → main → /(root) → Save**.
+6. Wait for GitHub Pages to publish the site.
 
-## Running Locally
-
-No installation needed. Just open `index.html` directly in a browser, or serve it with any static server, e.g.:
-
-```bash
-npx serve .
-```
-
-## Deploying on Vercel
-
-Since this is a static site (not Next.js, React, etc.), configure the Vercel project like this:
-
-1. **Framework Preset:** `Other`
-2. **Root Directory:** leave as `.` (only change this if `index.html` lives in a subfolder)
-3. **Build Command:** leave empty
-4. **Output Directory:** leave empty
-
-If the Framework Preset is left on something like "Next.js" by default, Vercel will try to run a build that doesn't exist for this project, which results in a blank deployed page.
-
-## Deploying on Netlify (alternative)
-
-Drag and drop this whole folder (including `assets/`) onto [Netlify Drop](https://app.netlify.com/drop) — no configuration required, and you get a live link instantly.
-
-## Features
-
-- Responsive streetwear storefront (hero, featured collection, about section, footer)
-- Product grid with Add to Cart / wishlist interactions
-- "Collections" modal that opens with an animated product showcase
-- Scroll-triggered fade-in animations throughout
+Important: keep the `assets` folder beside `index.html`; the sound files and Products 35–45 images are loaded from that folder.
