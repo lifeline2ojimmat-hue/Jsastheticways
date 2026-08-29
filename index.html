@@ -2976,34 +2976,79 @@ var tr=$('trackingOverlay');document.querySelectorAll('[href="#tracking"]').forE
 window.showOrderConfirmation=function(id){$('confirmationOrderId').textContent='Order ID: #'+id;$('confirmationOverlay').classList.add('open');playSound('checkout')};$('visitShopBtn').onclick=function(){$('confirmationOverlay').classList.remove('open');playSound('swoosh');$('shop').scrollIntoView({behavior:'smooth'})};
 var fb=JSON.parse(localStorage.getItem('js_feedback')||'[]'),rating=5;function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function renderFB(){var b=$('feedbackList');if(!b)return;b.innerHTML=fb.length?fb.slice(-6).reverse().map(f=>'<div class="feedback-card"><b>'+esc(f.name)+'</b><div>'+('★'.repeat(f.rating))+'</div><p>'+esc(f.text)+'</p></div>').join(''):'<div class="feedback-card">No reviews yet. Be the first!</div>'}renderFB();$('openFeedbackBtn').onclick=function(){$('feedbackForm').hidden=!$('feedbackForm').hidden;playSound('click')};document.querySelectorAll('#starPicker button').forEach(b=>b.onclick=function(){rating=+b.dataset.star;document.querySelectorAll('#starPicker button').forEach(x=>x.classList.toggle('selected',+x.dataset.star<=rating));playSound('tick')});document.querySelectorAll('#starPicker button').forEach(x=>{if(+x.dataset.star<=rating)x.classList.add('selected')});$('submitFeedback').onclick=function(){var n=$('feedbackName').value.trim()||'Customer',t=$('feedbackText').value.trim();if(!t){playSound('error');return}fb.push({name:n,rating:rating,text:t});localStorage.setItem('js_feedback',JSON.stringify(fb));$('feedbackName').value='';$('feedbackText').value='';$('feedbackForm').hidden=true;renderFB();playSound('success');showToast('Thank you for your feedback!')};
 var slider=$('heroSlides'),dots=$('heroDots'),idx=0;if(slider){var imgs=slider.querySelectorAll('img');imgs.forEach((_,i)=>{var d=document.createElement('button');d.onclick=function(){go(i)};dots.appendChild(d)});function go(i){idx=(i+imgs.length)%imgs.length;slider.style.transform='translateX(-'+idx*100+'%)';dots.querySelectorAll('button').forEach((d,j)=>d.classList.toggle('active',j===idx))}go(0);setInterval(()=>go(idx+1),3500);$('heroProductSlider').querySelector('.hero-prev').onclick=()=>go(idx-1);$('heroProductSlider').querySelector('.hero-next').onclick=()=>go(idx+1)}
-/* NEW COLLECTION INTERFACE: open with sound + flash, without breaking the existing shop */
+/* FIXED COLLECTION INTERFACE + TOP SEARCH */
 (function(){
   var ci=$('collectionInterface'), grid=$('collectionInterfaceGrid'), close=$('collectionClose');
   if(!ci||!grid)return;
 
+  function makeCollectionCard(sourceCard){
+    var clone=sourceCard.cloneNode(true);
+    clone.classList.add('in-view');
+    clone.style.display='block';
+    clone.style.opacity='1';
+    clone.style.transform='none';
+
+    /* Collection cards use the SAME real cart/wishlist logic as the main cards. */
+    var add=clone.querySelector('.add-btn');
+    var buy=clone.querySelector('.buy-btn');
+    var wish=clone.querySelector('.wish');
+    var sizePills=clone.querySelectorAll('.size-pill');
+
+    sizePills.forEach(function(pill){
+      pill.addEventListener('click',function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        sizePills.forEach(function(x){x.classList.remove('selected')});
+        pill.classList.add('selected');
+        playSound('click');
+      });
+    });
+
+    function product(){ return getProductFromCard(clone); }
+
+    if(add)add.addEventListener('click',function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var item=product(); addToCart(item,1); playSound('addToCart');
+      showToast(item.name+' added to cart');
+    });
+
+    if(buy)buy.addEventListener('click',function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var item=product(); addToCart(item,1); playSound('addToCart');
+      renderCart(); openDrawer('cartOverlay');
+    });
+
+    if(wish)wish.addEventListener('click',function(ev){
+      ev.preventDefault(); ev.stopPropagation();
+      var item=product();
+      var existing=wishlist.findIndex(function(x){return x.id===item.id});
+      if(existing===-1){
+        wishlist.push(item); wish.classList.add('liked'); playSound('wishlist');
+        showToast(item.name+' added to wishlist');
+      }else{
+        wishlist.splice(existing,1); wish.classList.remove('liked'); playSound('remove');
+        showToast(item.name+' removed from wishlist');
+      }
+      saveWishlist();
+    });
+
+    if(wish && wishlist.some(function(x){return x.id===product().id})) wish.classList.add('liked');
+    return clone;
+  }
+
   function openCollection(e){
-    if(e){e.preventDefault();e.stopImmediatePropagation();}
+    if(e){e.preventDefault();e.stopPropagation();}
     var sourceCards=Array.from(document.querySelectorAll('#productGrid .product-card'));
     grid.innerHTML='';
-    sourceCards.forEach(function(card, index){
-      var clone=card.cloneNode(true);
-      clone.classList.add('in-view');
-      clone.style.animationDelay=(index*35)+'ms';
-      var add=clone.querySelector('.add-btn'), buy=clone.querySelector('.buy-btn'), wish=clone.querySelector('.wish');
-      if(add)add.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.add-btn')?.click();});
-      if(buy)buy.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.buy-btn')?.click();});
-      if(wish)wish.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.wish')?.click();});
-      grid.appendChild(clone);
-    });
-    ci.classList.remove('open','flash-open');void ci.offsetWidth;
-    ci.classList.add('open','flash-open');ci.setAttribute('aria-hidden','false');
+    sourceCards.forEach(function(card){ grid.appendChild(makeCollectionCard(card)); });
+    ci.classList.remove('open','flash-open'); void ci.offsetWidth;
+    ci.classList.add('open','flash-open'); ci.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
-    try{playSound('collection')}catch(_){try{playSound('swoosh')}catch(__){}}
+    playSound('swoosh');
   }
+
   function closeCollection(){
-    ci.classList.remove('open','flash-open');ci.setAttribute('aria-hidden','true');
-    document.body.style.overflow='';
-    try{playSound('click')}catch(_){}
+    ci.classList.remove('open','flash-open'); ci.setAttribute('aria-hidden','true');
+    document.body.style.overflow=''; playSound('click');
   }
 
   document.addEventListener('click',function(e){
@@ -3014,5 +3059,343 @@ var slider=$('heroSlides'),dots=$('heroDots'),idx=0;if(slider){var imgs=slider.q
   ci.addEventListener('click',function(e){if(e.target===ci)closeCollection()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ci.classList.contains('open'))closeCollection()});
 })();
-orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();</script></body>
+
+/* TOP SEARCH: typing a product name immediately filters the real product grid
+   and automatically brings the results into view. */
+(function(){
+  var top=$('topProductSearch'), main=$('productSearch'), shop=$('shop');
+  if(!top||!main||!shop)return;
+  var scrolling=false;
+  top.addEventListener('input',function(){
+    main.value=top.value;
+    main.dispatchEvent(new Event('input',{bubbles:true}));
+    if(top.value.trim() && !scrolling){
+      scrolling=true;
+      shop.scrollIntoView({behavior:'smooth',block:'start'});
+      setTimeout(function(){scrolling=false;},650);
+    }
+  });
+})();
+orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();</script>
+<script id="final-fixes">
+(function(){
+  /* FINAL INTERACTION FIXES */
+  function $(id){ return document.getElementById(id); }
+  function safeSound(name){ try { if(typeof playSound==='function') playSound(name||'click'); } catch(e){} }
+
+  /* Make every product action work in both the main grid and Collection overlay. */
+  function productFromCard(card){
+    if(typeof getProductFromCard==='function') return getProductFromCard(card);
+    var name=card.querySelector('h3'), price=card.querySelector('.price'), img=card.querySelector('img'), size=card.querySelector('.size-pill.selected');
+    return {id:(name?name.textContent.trim():'Item')+(size?' - '+size.dataset.size:''),name:name?name.textContent.trim():'Item',size:size?size.dataset.size:null,price:price?parseInt(price.textContent.replace(/[^\d]/g,''),10):0,img:img?img.getAttribute('src'):''};
+  }
+  function toggleWish(card, button){
+    var item=productFromCard(card);
+    var i=wishlist.findIndex(function(x){return x.id===item.id;});
+    if(i<0){ wishlist.push(item); button.classList.add('liked'); safeSound('wishlist'); showToast(item.name+' added to wishlist'); }
+    else { wishlist.splice(i,1); button.classList.remove('liked'); safeSound('remove'); showToast(item.name+' removed from wishlist'); }
+    saveWishlist();
+  }
+  function bindCard(card){
+    if(!card || card.dataset.finalBound==='1') return;
+    card.dataset.finalBound='1';
+    card.querySelectorAll('.size-pill').forEach(function(b){
+      b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});b.classList.add('selected');safeSound('click');});
+    });
+    var add=card.querySelector('.add-btn'), buy=card.querySelector('.buy-btn'), wish=card.querySelector('.wish');
+    if(add) add.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var item=productFromCard(card);addToCart(item,1);safeSound('addToCart');showToast(item.name+' added to cart');});
+    if(buy) buy.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var item=productFromCard(card);addToCart(item,1);safeSound('addToCart');renderCart();openDrawer('cartOverlay');});
+    if(wish){ if(wishlist.some(function(x){return x.id===productFromCard(card).id})) wish.classList.add('liked'); wish.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();toggleWish(card,wish);}); }
+  }
+  document.querySelectorAll('.product-card').forEach(bindCard);
+
+  /* Collection cards are dynamically cloned; delegate actions so they ALWAYS work. */
+  var ci=$('collectionInterface');
+  if(ci) ci.addEventListener('click',function(e){
+    var b=e.target.closest('.add-btn,.buy-btn,.wish,.size-pill');
+    if(!b) return;
+    var card=b.closest('.product-card'); if(!card) return;
+    e.preventDefault(); e.stopPropagation();
+    if(b.classList.contains('size-pill')){card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});b.classList.add('selected');safeSound('click');return;}
+    if(b.classList.contains('add-btn')){var a=productFromCard(card);addToCart(a,1);safeSound('addToCart');showToast(a.name+' added to cart');return;}
+    if(b.classList.contains('buy-btn')){var q=productFromCard(card);addToCart(q,1);safeSound('addToCart');renderCart();openDrawer('cartOverlay');return;}
+    if(b.classList.contains('wish')){toggleWish(card,b);return;}
+  },true);
+
+  /* TOP SEARCH: filter the actual product cards immediately, then scroll to results. */
+  var top=$('topProductSearch'), main=$('productSearch'), grid=$('productGrid'), shop=$('shop');
+  if(top && grid){
+    var cards=Array.from(grid.querySelectorAll('.product-card'));
+    function doSearch(value){
+      var q=(value||'').trim().toLowerCase();
+      if(main) main.value=value;
+      cards.forEach(function(card){
+        var text=(card.innerText||'').toLowerCase();
+        card.style.display=(!q || text.indexOf(q)!==-1)?'':'none';
+      });
+      var visible=cards.filter(function(c){return c.style.display!== 'none';});
+      var old=grid.querySelector('.top-no-results'); if(old) old.remove();
+      if(q && visible.length===0){var m=document.createElement('div');m.className='top-no-results';m.style.cssText='grid-column:1/-1;padding:30px;text-align:center;border:1px solid var(--line);';m.textContent='No products found for “'+value+'”.';grid.appendChild(m);}
+      if(q && shop) setTimeout(function(){shop.scrollIntoView({behavior:'smooth',block:'start'});},40);
+    }
+    top.addEventListener('input',function(){doSearch(top.value);});
+    top.addEventListener('search',function(){doSearch(top.value);});
+  }
+
+  /* Sound fallback: any sound key requested but missing uses the normal click sound. */
+  if(typeof playSound==='function'){
+    var originalPlaySound=playSound;
+    window.playSound=function(key){ originalPlaySound(key==='success'?'click':key); };
+  }
+
+  /* Give buttons that have no dedicated sound handler a click sound without duplicating
+     the main shopping buttons' existing effects. */
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.dataset.soundSkip==='1') return;
+    var known='.add-btn,.buy-btn,.wish,.size-pill,#checkoutBtn,#loadMoreBtn,.cat-tab,.hero-slide-btn,#soundToggle,#trackingBtn,#searchIcon,#cartIcon,#wishlistIcon,#collectionClose,#viewAllBtn,.modal-close,.drawer-item-remove,.drawer-item-move';
+    if(b.matches(known)) return;
+    safeSound('click');
+  },false);
+})();
+</script>
+
+
+<style id="interaction-fix-v2">
+/* Search results panel: appears immediately under the top search while typing. */
+.top-search-results{position:absolute;left:0;right:0;top:100%;background:var(--card);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.28);display:none;z-index:9999;max-height:430px;overflow:auto}
+.top-search-results.open{display:block}
+.top-search-results-inner{max-width:1200px;margin:auto;padding:14px 20px}
+.top-search-result-list{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.top-search-result{border:1px solid var(--line);background:var(--bg);padding:8px;cursor:pointer;display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center}
+.top-search-result img{width:58px;height:68px;object-fit:cover;background:var(--bg-alt)}
+.top-search-result b{font-size:11px;line-height:1.25}.top-search-result span{font-size:10px;color:var(--ink-faint)}
+.top-search-no-results{padding:16px;text-align:center;color:var(--ink-faint);font-size:12px}
+@media(max-width:800px){.top-search-result-list{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.top-search-result-list{grid-template-columns:1fr}}
+</style>
+<script id="interaction-fix-v2-js">
+(function(){
+  'use strict';
+  function byId(id){return document.getElementById(id)}
+  function sound(name){try{if(typeof playSound==='function')playSound(name||'click')}catch(e){}}
+  function getCardProduct(card){
+    if(typeof getProductFromCard==='function') return getProductFromCard(card);
+    var n=card.querySelector('h3'), p=card.querySelector('.price'), im=card.querySelector('img'), z=card.querySelector('.size-pill.selected');
+    var name=n?n.textContent.trim():'Item', size=z?z.getAttribute('data-size'):null;
+    return {id:name+(size?' - '+size:''),name:name,size:size,price:p?parseInt(p.textContent.replace(/[^0-9]/g,''),10)||0:0,img:im?im.getAttribute('src')||'':''};
+  }
+  function wish(card,btn){
+    var item=getCardProduct(card), i=wishlist.findIndex(function(x){return x.id===item.id});
+    if(i<0){wishlist.push(item);btn.classList.add('liked');sound('wishlist');showToast(item.name+' added to wishlist')}
+    else{wishlist.splice(i,1);btn.classList.remove('liked');sound('remove');showToast(item.name+' removed from wishlist')}
+    saveWishlist();
+  }
+  function cartAdd(card){var item=getCardProduct(card);addToCart(item,1);sound('addToCart');updateCartCount();showToast(item.name+' added to cart');return item}
+  function action(btn){
+    var card=btn.closest('.product-card'); if(!card)return;
+    if(btn.classList.contains('size-pill')){
+      card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});
+      btn.classList.add('selected'); sound('click'); return;
+    }
+    if(btn.classList.contains('add-btn')){cartAdd(card);return}
+    if(btn.classList.contains('buy-btn')){
+      cartAdd(card); renderCart(); openDrawer('cartOverlay'); return;
+    }
+    if(btn.classList.contains('wish')){wish(card,btn);return}
+  }
+  /* One capture handler controls the shopping buttons. This also catches dynamically-created Collection cards. */
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('button.add-btn,button.buy-btn,button.wish,button.size-pill');
+    if(btn){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();action(btn);return;}
+  },true);
+
+  /* Every other button gets a click sound too, without replacing its own functional handler. */
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('button');
+    if(!btn)return;
+    if(btn.matches('.add-btn,.buy-btn,.wish,.size-pill'))return;
+    sound('click');
+  },false);
+
+  /* Top search: filter the actual shop AND show matching products directly beneath the search. */
+  var top=byId('topProductSearch'), main=byId('productSearch'), grid=byId('productGrid'), shop=byId('shop'), wrap=document.querySelector('.top-search-inner');
+  if(top&&grid&&wrap){
+    var panel=document.createElement('div'); panel.className='top-search-results';
+    panel.innerHTML='<div class="top-search-results-inner"><div class="top-search-result-list"></div><div class="top-search-no-results" hidden></div></div>';
+    wrap.appendChild(panel);
+    var list=panel.querySelector('.top-search-result-list'), empty=panel.querySelector('.top-search-no-results');
+    function cards(){return Array.from(grid.querySelectorAll('.product-card'))}
+    function search(q){
+      q=(q||'').trim().toLowerCase();
+      if(main && main.value!==q && main.value!==top.value) main.value=top.value;
+      var matches=cards().filter(function(c){return (c.innerText||'').toLowerCase().indexOf(q)!==-1});
+      if(!q){panel.classList.remove('open');return}
+      list.innerHTML=matches.slice(0,12).map(function(c,i){
+        var item=getCardProduct(c), safeName=String(item.name).replace(/[&<>\"]/g,function(x){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'}[x]});
+        return '<div class="top-search-result" data-result-index="'+i+'"><img src="'+String(item.img).replace(/"/g,'&quot;')+'" alt=""><div><b>'+safeName+'</b><br><span>₹'+item.price+'</span></div></div>';
+      }).join('');
+      empty.hidden=matches.length>0; empty.textContent=matches.length?'':'No products found for “'+top.value+'”.';
+      panel.classList.add('open');
+      if(main){main.value=top.value;main.dispatchEvent(new Event('input',{bubbles:true}))}
+      setTimeout(function(){if(shop)shop.scrollIntoView({behavior:'smooth',block:'start'})},30);
+      list.querySelectorAll('.top-search-result').forEach(function(r){r.addEventListener('click',function(){
+        var idx=parseInt(r.getAttribute('data-result-index'),10), c=matches[idx];
+        panel.classList.remove('open'); if(c){c.scrollIntoView({behavior:'smooth',block:'center'});sound('click')}
+      })});
+    }
+    top.addEventListener('input',function(){search(top.value)});
+    top.addEventListener('search',function(){search(top.value)});
+    document.addEventListener('click',function(e){if(!wrap.contains(e.target))panel.classList.remove('open')});
+  }
+
+  /* Make all action buttons explicit non-submit buttons. */
+  document.querySelectorAll('button.add-btn,button.buy-btn,button.wish,button.size-pill').forEach(function(b){b.type='button'});
+})();
+</script>
+
+
+<style id="final-shopping-fix">
+/* Final fix: Collection sits above drawers, so action feedback/drawers must also sit above it. */
+.collection-interface{z-index:20000}
+.drawer-overlay{z-index:30000}
+.toast{z-index:31000}
+.top-search-results{z-index:32000}
+</style>
+<script id="final-shopping-fix-js">
+(function(){
+  'use strict';
+  function el(id){ return document.getElementById(id); }
+  function sound(key){ try { if(typeof playSound==='function') playSound(key || 'click'); } catch(e){} }
+  function toast(msg){ try { if(typeof showToast==='function') showToast(msg); } catch(e){} }
+
+  function productFrom(card){
+    if(!card) return null;
+    var img=card.querySelector('.product-thumb img, img');
+    var name=card.querySelector('h3');
+    var price=card.querySelector('.price');
+    var size=card.querySelector('.size-pill.selected');
+    var n=name ? name.textContent.trim() : 'Item';
+    var z=size ? size.getAttribute('data-size') : null;
+    var p=price ? parseInt(price.textContent.replace(/[^0-9]/g,''),10) || 0 : 0;
+    return {id:n+(z?' - '+z:''),name:n,size:z,price:p,img:img ? (img.getAttribute('src')||'') : ''};
+  }
+
+  function add(card){
+    var item=productFrom(card);
+    if(!item) return null;
+    if(typeof addToCart==='function') addToCart(item,1);
+    sound('addToCart');
+    if(typeof updateCartCount==='function') updateCartCount();
+    toast(item.name+' added to cart');
+    return item;
+  }
+
+  function wishlist(card,button){
+    var item=productFrom(card);
+    if(!item) return;
+    var i=wishlist.findIndex(function(x){return x.id===item.id;});
+    if(i===-1){
+      wishlist.push(item);
+      if(button) button.classList.add('liked');
+      sound('wishlist');
+      toast(item.name+' added to wishlist');
+    }else{
+      wishlist.splice(i,1);
+      if(button) button.classList.remove('liked');
+      sound('remove');
+      toast(item.name+' removed from wishlist');
+    }
+    if(typeof saveWishlist==='function') saveWishlist();
+    if(typeof updateWishlistCount==='function') updateWishlistCount();
+  }
+
+  function closeCollectionForDrawer(){
+    var ci=el('collectionInterface');
+    if(ci && ci.classList.contains('open')){
+      ci.classList.remove('open','flash-open');
+      ci.setAttribute('aria-hidden','true');
+      document.body.style.overflow='';
+    }
+  }
+
+  /* One highest-priority handler for Collection buttons. */
+  document.addEventListener('click',function(e){
+    var button=e.target.closest('#collectionInterface .product-card .add-btn, #collectionInterface .product-card .buy-btn, #collectionInterface .product-card .wish, #collectionInterface .product-card .size-pill');
+    if(!button) return;
+    var card=button.closest('.product-card');
+    if(!card) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    if(button.classList.contains('size-pill')){
+      card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});
+      button.classList.add('selected');
+      sound('click');
+      return;
+    }
+    if(button.classList.contains('add-btn')){
+      add(card);
+      return;
+    }
+    if(button.classList.contains('wish')){
+      wishlist(card,button);
+      return;
+    }
+    if(button.classList.contains('buy-btn')){
+      var item=add(card);
+      if(!item) return;
+      /* The drawer was below Collection before; close Collection first, then open Cart. */
+      closeCollectionForDrawer();
+      setTimeout(function(){
+        if(typeof renderCart==='function') renderCart();
+        if(typeof openDrawer==='function') openDrawer('cartOverlay');
+      },30);
+      return;
+    }
+  },true);
+
+  /* Top search: instant filtering + matching cards visible in the shop. */
+  (function(){
+    var top=el('topProductSearch'), shop=el('shop'), grid=el('productGrid');
+    if(!top || !grid) return;
+
+    function run(q){
+      q=(q||'').trim().toLowerCase();
+      var cards=Array.from(grid.querySelectorAll('.product-card'));
+      cards.forEach(function(card){
+        var text=(card.innerText || card.textContent || '').toLowerCase();
+        card.style.display=(!q || text.indexOf(q)!==-1) ? '' : 'none';
+      });
+
+      var old=grid.querySelector('.final-search-empty');
+      if(old) old.remove();
+      var matches=cards.filter(function(c){return c.style.display!=='none'});
+      if(q && !matches.length){
+        var empty=document.createElement('div');
+        empty.className='final-search-empty';
+        empty.style.cssText='grid-column:1/-1;padding:32px;text-align:center;border:1px solid var(--line);color:var(--ink-faint);';
+        empty.textContent='No products found for “'+(top.value||'')+'”.';
+        grid.appendChild(empty);
+      }
+      if(q && shop){
+        setTimeout(function(){shop.scrollIntoView({behavior:'smooth',block:'start'});},20);
+      }
+    }
+
+    top.addEventListener('input',function(){
+      var main=el('productSearch');
+      if(main) main.value=top.value;
+      run(top.value);
+    },true);
+    top.addEventListener('search',function(){run(top.value);},true);
+  })();
+
+  /* Keep every shopping button explicitly non-submit. */
+  document.querySelectorAll('.add-btn,.buy-btn,.wish,.size-pill').forEach(function(b){b.type='button';});
+})();
+</script>
+
+</body>
 </html>
