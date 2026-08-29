@@ -3710,5 +3710,149 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 })();
 </script>
 
+
+<script id="product-detail-button-final-fix">
+(function(){
+  'use strict';
+  var $=function(id){return document.getElementById(id)};
+  var overlay=$('productDetailOverlay');
+  if(!overlay) return;
+  var current=null, qty=1, selectedSize='L', selectedColor='Black';
+
+  function sound(name){
+    try{ if(typeof window.playSound==='function') window.playSound(name||'click'); }catch(e){}
+  }
+  function toast(msg){
+    try{ if(typeof window.showToast==='function') window.showToast(msg); }catch(e){}
+  }
+  function cardFromCurrent(){ return current && current.card ? current.card : null; }
+  function getProduct(){
+    var card=cardFromCurrent();
+    var name=card&&card.querySelector('h3'), price=card&&card.querySelector('.price'), img=card&&card.querySelector('.product-thumb img');
+    return {
+      id:(current.number||current.name||'product')+'-'+selectedSize+'-'+selectedColor,
+      name:current.name, price:current.price, img:current.img || (img?img.getAttribute('src'):'') ,
+      size:selectedSize, color:selectedColor, qty:qty,
+      number:current.number||''
+    };
+  }
+  function refreshCart(){
+    try{ if(typeof window.renderCart==='function') window.renderCart(); }catch(e){}
+    try{ if(typeof window.updateCartCount==='function') window.updateCartCount(); }catch(e){}
+  }
+  function refreshWish(){
+    try{ if(typeof window.saveWishlist==='function') window.saveWishlist(); else localStorage.setItem('js_wishlist',JSON.stringify(window.wishlist||[])); }catch(e){}
+    try{ if(typeof window.updateWishlistCount==='function') window.updateWishlistCount(); }catch(e){}
+  }
+  function openCart(){
+    try{ if(typeof window.openDrawer==='function') window.openDrawer('cartOverlay'); }
+    catch(e){ var c=$('cartOverlay'); if(c)c.classList.add('open'); }
+  }
+  function closeDetail(){
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden','true');
+    document.body.classList.remove('modal-locked');
+    sound('swoosh');
+  }
+
+  // Replace the old product-detail handlers so every button has exactly ONE action/sound.
+  var close=$('pdClose');
+  if(close) close.onclick=closeDetail;
+
+  var minus=$('pdQtyMinus'), plus=$('pdQtyPlus');
+  if(minus) minus.onclick=function(e){e.preventDefault();qty=Math.max(1,qty-1);$('pdQty').textContent=qty;sound('click');};
+  if(plus) plus.onclick=function(e){e.preventDefault();qty=Math.min(20,qty+1);$('pdQty').textContent=qty;sound('click');};
+
+  document.querySelectorAll('#pdColors .pd-color').forEach(function(b){
+    b.onclick=function(e){
+      e.preventDefault(); e.stopPropagation();
+      selectedColor=b.dataset.color||b.textContent.trim();
+      document.querySelectorAll('#pdColors .pd-color').forEach(function(x){x.classList.toggle('selected',x===b)});
+      sound('tick');
+    };
+  });
+
+  function bindSizes(){
+    document.querySelectorAll('#pdSizes .size-pill').forEach(function(b){
+      b.onclick=function(e){
+        e.preventDefault(); e.stopPropagation();
+        selectedSize=b.dataset.size||b.textContent.trim();
+        document.querySelectorAll('#pdSizes .size-pill').forEach(function(x){x.classList.toggle('selected',x===b)});
+        sound('click');
+      };
+    });
+  }
+  bindSizes();
+
+  var add=$('pdAdd');
+  if(add) add.onclick=function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!current) return;
+    var it=getProduct();
+    if(typeof window.addToCart==='function') window.addToCart(it,qty);
+    refreshCart(); sound('addToCart'); toast(current.name+' added to cart');
+  };
+
+  var buy=$('pdBuy');
+  if(buy) buy.onclick=function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!current) return;
+    var it=getProduct();
+    if(typeof window.addToCart==='function') window.addToCart(it,qty);
+    refreshCart(); sound('addToCart');
+    closeDetail();
+    setTimeout(openCart,120);
+  };
+
+  var wish=$('pdWishlist');
+  if(wish) wish.onclick=function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!current) return;
+    var it=getProduct();
+    window.wishlist=Array.isArray(window.wishlist)?window.wishlist:[];
+    var idx=window.wishlist.findIndex(function(x){return x.id===it.id;});
+    if(idx<0){window.wishlist.push(it);wish.classList.add('liked');sound('wishlist');toast(current.name+' added to wishlist');}
+    else{window.wishlist.splice(idx,1);wish.classList.remove('liked');sound('remove');toast(current.name+' removed from wishlist');}
+    refreshWish();
+  };
+
+  var share=$('pdShare');
+  if(share) share.onclick=function(e){
+    e.preventDefault(); e.stopPropagation();
+    if(!current) return;
+    var url=location.href.split('#')[0]+'#product-'+(current.number||'');
+    var data={title:current.name,text:'Check out '+current.name,url:url};
+    if(navigator.share){
+      navigator.share(data).then(function(){sound('tick')}).catch(function(){});
+    }else if(navigator.clipboard){
+      navigator.clipboard.writeText(url).then(function(){sound('tick');toast('Product link copied');}).catch(function(){toast('Copy this product link: '+url);});
+    }else{toast('Product link: '+url);sound('tick');}
+  };
+
+  var support=$('pdSupport');
+  if(support) support.onclick=function(e){
+    e.preventDefault(); e.stopPropagation();
+    var msg=encodeURIComponent('Hi! I need support for '+(current?current.name:'a product')+'.');
+    window.open('https://wa.me/919707286520?text='+msg,'_blank','noopener');
+    sound('swoosh');
+  };
+
+  var secure=$('pdSecure');
+  if(secure){secure.style.cursor='pointer';secure.onclick=function(){toast('Secure order: your order details are confirmed before sending on WhatsApp.');sound('tick');};}
+  var easy=overlay.querySelector('.pd-info-strip div:last-child');
+  if(easy){easy.style.cursor='pointer';easy.onclick=function(){toast('Easy Order: choose size, colour and quantity, then tap Buy Now.');sound('click');};}
+
+  // Re-bind sizes whenever the detail modal opens, because the size buttons are recreated.
+  var oldOpen=window.__jsawProductDetailOpen;
+  // Observe the modal for newly created size buttons without adding click listeners to them twice.
+  var mo=new MutationObserver(function(muts){
+    var changed=false;
+    muts.forEach(function(m){if(m.addedNodes&&m.addedNodes.length) changed=true;});
+    if(changed) bindSizes();
+  });
+  mo.observe($('pdSizes'),{childList:true});
+})();
+</script>
+
 </body>
 </html>
