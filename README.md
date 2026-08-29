@@ -1,28 +1,10 @@
 # JS ASTHETIC WAYS — GitHub Ready
 
-## What's included
-- Product-detail interface opens when a product card is clicked.
-- Product detail has image, price, description, size, colour, quantity, Add to Cart, Buy Now, Wishlist and Share.
-- Products 35–45 added as a NEW DROP section using the uploaded product images.
-- Order cancellation button with required cancellation reason and optional details.
-- Cancellation is saved in browser localStorage and also opens WhatsApp with the cancellation reason.
-- Existing cart, wishlist, checkout and visual effects are kept.
+Product 1 now has a 4-image gallery (front, back, lifestyle, fabric).
+The product-detail buttons remain active: Wishlist, Share Product, Secure Order,
+Size Select, WhatsApp Support, Add to Cart and Buy Now.
 
-## Change product prices
-Open `index.html` and find the product card you want. Update BOTH:
-1. `data-price="899"`
-2. `<div class="price">₹899</div>`
+Upload the contents of this folder to the same GitHub repository as the existing
+site. Keep `index.html` at the repository root and keep the `assets` folder.
 
-Example: change 899 to 1299 in both places.
-
-For Products 35–45, the current price is ₹899. Their cards are marked `new-drop-card`.
-
-## GitHub upload
-1. Create/open a GitHub repository.
-2. Click **Add file → Upload files**.
-3. Upload `index.html`, the `assets` folder, and this README.
-4. Commit the changes.
-5. For a live site: **Settings → Pages → Deploy from a branch → main → /(root) → Save**.
-6. Wait for GitHub Pages to publish the site.
-
-Important: keep the `assets` folder beside `index.html`; the sound files and Products 35–45 images are loaded from that folder.
+Products 35–45 from the existing site are preserved in the HTML.
