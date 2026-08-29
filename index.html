@@ -3711,6 +3711,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 .pd-thumb.active{border:2px solid var(--blood)}
 .pd-thumb img{width:100%;height:100%;object-fit:contain}
 .pd-main-stage{height:650px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#fafafa;border-radius:3px}
+.pd-gallery-thumbs{display:flex;flex-direction:column;gap:10px;max-height:680px;overflow-y:auto;scrollbar-width:thin;z-index:2;position:relative;margin-right:12px}.pd-thumb{width:72px;height:82px;flex:0 0 72px;border:1px solid var(--line);background:var(--card);padding:4px;cursor:pointer;position:relative;overflow:hidden;transition:.2s;display:grid;place-items:center}.pd-thumb:hover,.pd-thumb.active{border-color:var(--blood);transform:translateY(-1px)}.pd-thumb img{width:100%;height:100%;object-fit:cover;display:none}.pd-thumb-placeholder{width:100%;height:100%;display:grid;place-items:center;text-align:center;font-size:9px;letter-spacing:.08em;color:var(--ink-faint);border:1px dashed var(--line);background:rgba(0,0,0,.04)}.product-detail-media{display:grid;grid-template-columns:84px 1fr;gap:12px}.pd-main-stage{min-width:0;display:flex;align-items:center;justify-content:center}.pd-thumb.active .pd-thumb-placeholder{color:var(--blood);border-color:var(--blood)}
 .product-detail-main-img{max-height:620px;max-width:100%;width:100%;object-fit:contain;filter:none;transition:transform .35s ease}
 .pd-main-stage:hover .product-detail-main-img{transform:scale(1.035)}
 .product-detail-info{padding:38px 24px 28px;background:#fff;color:#111}
@@ -3724,7 +3725,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 .pd-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.pd-service{border-top:1px solid #ddd;padding-top:12px;font-size:11px;line-height:1.35;color:#555}.pd-service b{display:block;color:#222;margin-bottom:4px}
 .pd-meta{grid-template-columns:repeat(3,1fr)}.pd-meta button{background:#fafafa;color:#222;border-color:#ddd}
 @media(max-width:900px){.product-detail-grid{grid-template-columns:1fr}.product-detail-media{min-height:500px;border-right:0;border-bottom:1px solid #eee}.pd-main-stage{height:480px}.product-detail-info{padding:28px 20px}}
-@media(max-width:560px){.product-detail-media{grid-template-columns:1fr;padding:15px}.pd-gallery-thumbs{order:2;flex-direction:row;max-height:none;overflow-x:auto}.pd-thumb{flex:0 0 58px;width:58px;height:64px}.pd-main-stage{height:390px}.pd-buybox .pd-secondary{grid-template-columns:1fr}.pd-service-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.product-detail-media{grid-template-columns:1fr;padding:15px}.pd-gallery-thumbs{order:2;flex-direction:row;max-height:none;overflow-x:auto;margin-right:0}.pd-thumb{flex:0 0 58px;width:58px;height:64px}.pd-main-stage{height:390px}.pd-buybox .pd-secondary{grid-template-columns:1fr}.pd-service-grid{grid-template-columns:1fr 1fr}}
 </style>
 <style id="product-detail-v4">
 /* Product detail experience */
@@ -3811,7 +3812,44 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
   var activeCard=null,pdQty=1,pdSize='L',pdColor='Black',cancelOrderId=null,cancelReason='';
   var $=function(id){return document.getElementById(id)};
   function product(card){var img=card.querySelector('.product-thumb img'),name=card.querySelector('h3'),price=card.querySelector('.price'),rating=card.querySelector('.rating');return{name:name?name.textContent.trim():'Product',price:price?parseInt(price.textContent.replace(/\D/g,''),10)||0:0,img:img?img.getAttribute('src'):'',rating:rating?rating.textContent.trim():'★★★★★ · 5.0',card:card};}
-  function gallery(src,name){var thumbs=$('pdThumbs');thumbs.innerHTML='';var list=[src,src,src,src,src];list.forEach(function(url,i){var b=document.createElement('button');b.type='button';b.className='pd-thumb'+(i===0?' active':'');b.innerHTML='<img src="'+url.replace(/"/g,'&quot;')+'" alt="'+name.replace(/"/g,'&quot;')+' view '+(i+1)+'">';b.onclick=function(){$('pdImage').src=url;thumbs.querySelectorAll('.pd-thumb').forEach(function(x){x.classList.remove('active')});b.classList.add('active');playSound('click')};thumbs.appendChild(b)});}
+  function gallery(src,name){
+    var thumbs=$('pdThumbs'); thumbs.innerHTML='';
+    var clean=String(src||'').split('?')[0], match=clean.match(/^(.*?)(product-[^\/]+?)(\.[^.\/]+)$/i);
+    var base=match?match[2]:''; var ext=match?match[3]:'';
+    var folder=match?clean.slice(0,clean.lastIndexOf('/')+1):'assets/';
+    var folderNum=(base.match(/product-(\d+)/i)||[])[1]||'';
+    var candidates=[];
+    for(var i=1;i<=5;i++){
+      if(i===1) candidates.push({url:src,label:'Front View'});
+      else {
+        var n=i;
+        candidates.push({url:folder+base+'-'+n+ext,label:'View '+n,altExt:true});
+      }
+    }
+    /* Also support the numbered asset-folder structure (assets/35/...). */
+    if(folderNum){
+      for(var j=1;j<=5;j++){
+        if(j===1) continue;
+        candidates[j-1].folderFallback='assets/'+folderNum+'/'+base+'-'+j+ext;
+      }
+    }
+    candidates.forEach(function(item,i){
+      var b=document.createElement('button'); b.type='button'; b.className='pd-thumb'+(i===0?' active':'');
+      var img=document.createElement('img'); img.alt=name+' '+item.label; img.loading='lazy';
+      var ph=document.createElement('span'); ph.className='pd-thumb-placeholder'; ph.textContent=i===0?'MAIN':'ADD '+i;
+      b.appendChild(img); b.appendChild(ph); thumbs.appendChild(b);
+      function useUrl(url){
+        img.onload=function(){ph.style.display='none';img.style.display='block';item.ready=true};
+        img.onerror=function(){img.style.display='none'; if(item.folderFallback && img.src.indexOf(item.folderFallback)===-1){img.src=item.folderFallback;return;} ph.style.display='grid';item.ready=false};
+        img.src=url;
+      }
+      useUrl(item.url);
+      b.onclick=function(){
+        if(!item.ready){showToast('Add '+item.label+' image in assets first.');playSound('error');return;}
+        $('pdImage').src=img.currentSrc||img.src; thumbs.querySelectorAll('.pd-thumb').forEach(function(x){x.classList.remove('active')}); b.classList.add('active'); playSound('click');
+      };
+    });
+  }
   function open(card){
     activeCard=card;var p=product(card);pdQty=1;pdSize=(card.querySelector('.size-pill.selected')||card.querySelector('.size-pill'))?.dataset.size||'L';
     $('pdImage').src=p.img;$('pdImage').alt=p.name;$('pdTitle').textContent=p.name;$('pdPrice').textContent='₹'+p.price;$('pdRating').textContent=p.rating;gallery(p.img,p.name);
