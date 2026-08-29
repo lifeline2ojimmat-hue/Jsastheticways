@@ -3708,10 +3708,20 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 .product-detail-media{padding:28px 22px;background:#fff;display:grid;grid-template-columns:76px minmax(0,1fr);gap:18px;align-items:center;min-height:720px;border-right:1px solid #eee}
 .pd-gallery-thumbs{display:flex;flex-direction:column;gap:10px;align-self:start;padding-top:8px;max-height:650px;overflow:auto}
 .pd-thumb{width:68px;height:78px;padding:4px;border:1px solid #ccc;background:#fff;border-radius:6px;cursor:pointer;overflow:hidden}
+/* 4 extra product-image upload slots — every product */
+.pd-gallery-thumbs{width:78px;display:flex;flex-direction:column;gap:12px;max-height:650px;overflow-y:auto;position:relative;z-index:2}
+.pd-upload-slot{width:68px;height:78px;padding:0;border:1px dashed #777;background:rgba(20,20,20,.45);color:#aaa;border-radius:6px;cursor:pointer;overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative;flex:0 0 auto}
+.pd-upload-slot:hover{border-color:var(--blood);color:#fff;background:rgba(120,0,0,.22)}
+.pd-upload-slot.active{border:2px solid var(--blood);color:#fff}
+.pd-upload-slot img{width:100%;height:100%;object-fit:contain;background:#fff}
+.pd-upload-slot .slot-label{font-size:9px;letter-spacing:.08em;font-weight:800;text-align:center;line-height:1.25}
+.pd-upload-slot .slot-label small{display:block;font-size:8px;font-weight:600;margin-top:4px;opacity:.8}
+.pd-upload-input{display:none}
+@media(max-width:560px){.pd-gallery-thumbs{width:100%;flex-direction:row;max-height:none;overflow-x:auto;overflow-y:hidden}.pd-upload-slot{flex:0 0 58px;width:58px;height:64px}}
+
 .pd-thumb.active{border:2px solid var(--blood)}
 .pd-thumb img{width:100%;height:100%;object-fit:contain}
 .pd-main-stage{height:650px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:#fafafa;border-radius:3px}
-.pd-gallery-thumbs{display:flex;flex-direction:column;gap:10px;max-height:680px;overflow-y:auto;scrollbar-width:thin;z-index:2;position:relative;margin-right:12px}.pd-thumb{width:72px;height:82px;flex:0 0 72px;border:1px solid var(--line);background:var(--card);padding:4px;cursor:pointer;position:relative;overflow:hidden;transition:.2s;display:grid;place-items:center}.pd-thumb:hover,.pd-thumb.active{border-color:var(--blood);transform:translateY(-1px)}.pd-thumb img{width:100%;height:100%;object-fit:cover;display:none}.pd-thumb-placeholder{width:100%;height:100%;display:grid;place-items:center;text-align:center;font-size:9px;letter-spacing:.08em;color:var(--ink-faint);border:1px dashed var(--line);background:rgba(0,0,0,.04)}.product-detail-media{display:grid;grid-template-columns:84px 1fr;gap:12px}.pd-main-stage{min-width:0;display:flex;align-items:center;justify-content:center}.pd-thumb.active .pd-thumb-placeholder{color:var(--blood);border-color:var(--blood)}
 .product-detail-main-img{max-height:620px;max-width:100%;width:100%;object-fit:contain;filter:none;transition:transform .35s ease}
 .pd-main-stage:hover .product-detail-main-img{transform:scale(1.035)}
 .product-detail-info{padding:38px 24px 28px;background:#fff;color:#111}
@@ -3725,7 +3735,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
 .pd-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.pd-service{border-top:1px solid #ddd;padding-top:12px;font-size:11px;line-height:1.35;color:#555}.pd-service b{display:block;color:#222;margin-bottom:4px}
 .pd-meta{grid-template-columns:repeat(3,1fr)}.pd-meta button{background:#fafafa;color:#222;border-color:#ddd}
 @media(max-width:900px){.product-detail-grid{grid-template-columns:1fr}.product-detail-media{min-height:500px;border-right:0;border-bottom:1px solid #eee}.pd-main-stage{height:480px}.product-detail-info{padding:28px 20px}}
-@media(max-width:560px){.product-detail-media{grid-template-columns:1fr;padding:15px}.pd-gallery-thumbs{order:2;flex-direction:row;max-height:none;overflow-x:auto;margin-right:0}.pd-thumb{flex:0 0 58px;width:58px;height:64px}.pd-main-stage{height:390px}.pd-buybox .pd-secondary{grid-template-columns:1fr}.pd-service-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.product-detail-media{grid-template-columns:1fr;padding:15px}.pd-gallery-thumbs{order:2;flex-direction:row;max-height:none;overflow-x:auto}.pd-thumb{flex:0 0 58px;width:58px;height:64px}.pd-main-stage{height:390px}.pd-buybox .pd-secondary{grid-template-columns:1fr}.pd-service-grid{grid-template-columns:1fr 1fr}}
 </style>
 <style id="product-detail-v4">
 /* Product detail experience */
@@ -3811,48 +3821,46 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
   var overlay=document.getElementById('productDetailOverlay'); if(!overlay)return;
   var activeCard=null,pdQty=1,pdSize='L',pdColor='Black',cancelOrderId=null,cancelReason='';
   var $=function(id){return document.getElementById(id)};
-  function product(card){var img=card.querySelector('.product-thumb img'),name=card.querySelector('h3'),price=card.querySelector('.price'),rating=card.querySelector('.rating');return{name:name?name.textContent.trim():'Product',price:price?parseInt(price.textContent.replace(/\D/g,''),10)||0:0,img:img?img.getAttribute('src'):'',rating:rating?rating.textContent.trim():'★★★★★ · 5.0',card:card};}
-  function gallery(src,name){
-    var thumbs=$('pdThumbs'); thumbs.innerHTML='';
-    var clean=String(src||'').split('?')[0], match=clean.match(/^(.*?)(product-[^\/]+?)(\.[^.\/]+)$/i);
-    var base=match?match[2]:''; var ext=match?match[3]:'';
-    var folder=match?clean.slice(0,clean.lastIndexOf('/')+1):'assets/';
-    var folderNum=(base.match(/product-(\d+)/i)||[])[1]||'';
-    var candidates=[];
-    for(var i=1;i<=5;i++){
-      if(i===1) candidates.push({url:src,label:'Front View'});
-      else {
-        var n=i;
-        candidates.push({url:folder+base+'-'+n+ext,label:'View '+n,altExt:true});
+  function product(card){var img=card.querySelector('.product-thumb img'),name=card.querySelector('h3'),price=card.querySelector('.price'),rating=card.querySelector('.rating');var all=document.querySelectorAll('.product-card');var no=card.dataset.productNumber||String(Array.prototype.indexOf.call(all,card)+1);return{name:name?name.textContent.trim():'Product',price:price?parseInt(price.textContent.replace(/\D/g,''),10)||0:0,img:img?img.getAttribute('src'):'',rating:rating?rating.textContent.trim():'★★★★★ · 5.0',productNo:no,card:card};}
+  function gallery(src,name,productNo){
+    var thumbs=$('pdThumbs');thumbs.innerHTML='';
+    var current=[src,'','','',''];
+    var labels=['MAIN','ADD 1','ADD 2','ADD 3','ADD 4'];
+    function select(i,b){if(!current[i])return;$('pdImage').src=current[i];thumbs.querySelectorAll('.pd-upload-slot').forEach(function(x){x.classList.remove('active')});b.classList.add('active');playSound('click')}
+    current.forEach(function(url,i){
+      var b=document.createElement('button');b.type='button';b.className='pd-upload-slot'+(i===0?' active':'');
+      b.title=i===0?'Main product image':'Add product image '+i;
+      var input=document.createElement('input');input.type='file';input.accept='image/*';input.className='pd-upload-input';
+      b.appendChild(input);
+      function paint(){
+        var old=b.querySelector('img');if(old)old.remove();
+        var label=b.querySelector('.slot-label');if(label)label.remove();
+        if(current[i]){var im=document.createElement('img');im.src=current[i];im.alt=name+' view '+(i+1);b.appendChild(im)}
+        else{var l=document.createElement('span');l.className='slot-label';l.innerHTML=labels[i]+'<small>CLICK TO ADD</small>';b.appendChild(l)}
       }
-    }
-    /* Also support the numbered asset-folder structure (assets/35/...). */
-    if(folderNum){
-      for(var j=1;j<=5;j++){
-        if(j===1) continue;
-        candidates[j-1].folderFallback='assets/'+folderNum+'/'+base+'-'+j+ext;
-      }
-    }
-    candidates.forEach(function(item,i){
-      var b=document.createElement('button'); b.type='button'; b.className='pd-thumb'+(i===0?' active':'');
-      var img=document.createElement('img'); img.alt=name+' '+item.label; img.loading='lazy';
-      var ph=document.createElement('span'); ph.className='pd-thumb-placeholder'; ph.textContent=i===0?'MAIN':'ADD '+i;
-      b.appendChild(img); b.appendChild(ph); thumbs.appendChild(b);
-      function useUrl(url){
-        img.onload=function(){ph.style.display='none';img.style.display='block';item.ready=true};
-        img.onerror=function(){img.style.display='none'; if(item.folderFallback && img.src.indexOf(item.folderFallback)===-1){img.src=item.folderFallback;return;} ph.style.display='grid';item.ready=false};
-        img.src=url;
-      }
-      useUrl(item.url);
-      b.onclick=function(){
-        if(!item.ready){showToast('Add '+item.label+' image in assets first.');playSound('error');return;}
-        $('pdImage').src=img.currentSrc||img.src; thumbs.querySelectorAll('.pd-thumb').forEach(function(x){x.classList.remove('active')}); b.classList.add('active'); playSound('click');
-      };
+      paint();
+      b.addEventListener('click',function(e){
+        if(e.target===input)return;
+        if(current[i]){select(i,b);return;}
+        input.click();
+      });
+      input.addEventListener('change',function(){
+        var file=input.files&&input.files[0];if(!file)return;
+        var reader=new FileReader();reader.onload=function(ev){current[i]=ev.target.result;paint();select(i,b);showToast('Product '+productNo+' image '+i+' added');};reader.readAsDataURL(file);
+      });
+      thumbs.appendChild(b);
+    });
+    // If the owner later uploads conventional files to GitHub, auto-use them when present.
+    [1,2,3,4].forEach(function(n){
+      var candidate=['assets/product-'+productNo+'/'+n+'.jpg','assets/product-'+productNo+'/'+n+'.jpeg','assets/product-'+productNo+'/'+n+'.png','assets/product-'+productNo+'/'+n+'.webp'];
+      (function(i,paths){
+        var probe=0;function tryNext(){if(probe>=paths.length)return;var test=new Image();test.onload=function(){current[i]=paths[probe];var b=thumbs.querySelectorAll('.pd-upload-slot')[i];if(b){var old=b.querySelector('img');if(old)old.remove();var l=b.querySelector('.slot-label');if(l)l.remove();var im=document.createElement('img');im.src=paths[probe];im.alt=name+' view '+(i+1);b.appendChild(im)}};test.onerror=function(){probe++;tryNext()};test.src=paths[probe]+'?v='+Date.now()}tryNext();
+      })(n,candidate);
     });
   }
   function open(card){
     activeCard=card;var p=product(card);pdQty=1;pdSize=(card.querySelector('.size-pill.selected')||card.querySelector('.size-pill'))?.dataset.size||'L';
-    $('pdImage').src=p.img;$('pdImage').alt=p.name;$('pdTitle').textContent=p.name;$('pdPrice').textContent='₹'+p.price;$('pdRating').textContent=p.rating;gallery(p.img,p.name);
+    $('pdImage').src=p.img;$('pdImage').alt=p.name;$('pdTitle').textContent=p.name;$('pdPrice').textContent='₹'+p.price;$('pdRating').textContent=p.rating;gallery(p.img,p.name,p.productNo);
     var cat=card.dataset.category||'streetwear';$('pdKicker').textContent='JS ASTHETIC WAYS / '+cat.toUpperCase();$('pdDesc').textContent='Premium '+cat+' streetwear with a relaxed modern fit. Designed for everyday wear, layered looks and a bold aesthetic. Select size, colour and quantity before ordering.';
     $('pdSizes').innerHTML='';['S','M','L','XL','XXL'].forEach(function(size){var b=document.createElement('button');b.type='button';b.className='pd-option'+(size===pdSize?' active':'');b.textContent=size;b.onclick=function(){pdSize=size;document.querySelectorAll('#pdSizes .pd-option').forEach(function(x){x.classList.remove('active')});b.classList.add('active');playSound('click')};$('pdSizes').appendChild(b)});
     $('pdColors').innerHTML='';['Black','White','Olive','Navy'].forEach(function(c){var b=document.createElement('button');b.type='button';b.className='pd-option pd-color'+(c===pdColor?' active':'');b.dataset.color=c;b.title=c;b.setAttribute('aria-label',c);b.onclick=function(){pdColor=c;document.querySelectorAll('#pdColors .pd-color').forEach(function(x){x.classList.remove('active')});b.classList.add('active');playSound('click')};$('pdColors').appendChild(b)});
