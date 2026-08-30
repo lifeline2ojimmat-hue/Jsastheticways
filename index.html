@@ -2450,7 +2450,7 @@
     var SOUND_FILES = {
       addToCart:'add-to-cart.mp3', checkout:'checkout-success.mp3', wishlist:'wishlist.mp3',
       coupon:'coupon-applied.mp3', error:'error.mp3', swoosh:'swoosh.mp3', tick:'tick.mp3',
-      remove:'remove.mp3', toggle:'toggle.mp3', click:'click.mp3'
+      remove:'remove.mp3', toggle:'toggle.mp3', click:'click.mp3', success:'success.mp3'
     };
     Object.keys(SOUND_FILES).forEach(function(key){
       var a = new Audio(SOUND_BASE + SOUND_FILES[key]);
@@ -3410,11 +3410,7 @@ orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();<
     top.addEventListener('search',function(){doSearch(top.value);});
   }
 
-  /* Sound fallback: any sound key requested but missing uses the normal click sound. */
-  if(typeof playSound==='function'){
-    var originalPlaySound=playSound;
-    window.playSound=function(key){ originalPlaySound(key==='success'?'click':key); };
-  }
+  /* success.mp3 now has its own dedicated sound file — no fallback remap needed. */
 
   /* Give buttons that have no dedicated sound handler a click sound without duplicating
      the main shopping buttons' existing effects. */
