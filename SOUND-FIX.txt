@@ -1,0 +1,5 @@
+SOUND EFFECTS RESTORED
+- UI sound files are preserved in assets/sounds/
+- Audio is unlocked on first user interaction for Chrome/GitHub Pages
+- Effects use the original MP3 files
+- A small Web Audio fallback plays if an MP3 is blocked/unavailable
