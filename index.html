@@ -1022,42 +1022,43 @@
      Free sign-up at https://www.emailjs.com — then fill in EMAILJS_* constants further down. -->
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
-<style id="final-product-detail-css">
-.product-detail-overlay{position:fixed;inset:0;z-index:25000;background:rgba(5,4,4,.9);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:18px}
-.product-detail-overlay.open{display:flex}
-.product-detail-panel{width:min(1180px,100%);max-height:94vh;overflow:auto;background:var(--bg-alt);border:1px solid var(--line);box-shadow:0 30px 100px rgba(0,0,0,.65);animation:pdIn .32s ease}
-@keyframes pdIn{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
-.pd-head{display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid var(--line)}
-.pd-head b{font-family:'Bebas Neue';font-size:24px;letter-spacing:.08em}
-.pd-close{width:38px;height:38px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-size:22px}
-.pd-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;padding:26px}
-.pd-gallery{display:grid;grid-template-columns:76px 1fr;gap:12px}
-.pd-thumbs{display:flex;flex-direction:column;gap:9px}
-.pd-thumb{width:76px;height:88px;padding:3px;border:1px solid var(--line);background:var(--card);cursor:pointer}
-.pd-thumb.active{border-color:var(--blood)}
-.pd-thumb img{width:100%;height:100%;object-fit:cover}
-.pd-main{background:var(--card);min-height:560px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.pd-main img{width:100%;height:100%;max-height:680px;object-fit:cover}
-.pd-empty{width:100%;height:100%;min-height:560px;display:grid;place-items:center;color:var(--ink-faint);font-size:12px;letter-spacing:.12em;text-transform:uppercase}
-.pd-eyebrow{color:var(--blood);font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:9px}
-.pd-title{font-family:'Bebas Neue';font-size:42px;line-height:1;letter-spacing:.03em;margin-bottom:12px}
-.pd-price{font-size:22px;color:var(--blood);font-weight:700;margin-bottom:18px}
-.pd-copy{color:var(--ink-dim);font-size:14px;line-height:1.7;margin-bottom:22px}
-.pd-label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin:15px 0 8px}
-.pd-swatches{display:flex;gap:8px;flex-wrap:wrap}
-.pd-color{min-width:70px;padding:9px 12px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-.pd-color.selected{border-color:var(--blood);background:var(--blood);color:#fff}
-.pd-qty{display:flex;align-items:center;gap:14px}
-.pd-qty button{width:34px;height:34px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
-.pd-qty span{min-width:25px;text-align:center}
-.pd-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
-.pd-action{padding:13px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
-.pd-action.primary{background:var(--blood);border-color:var(--blood);color:#fff}
-.pd-action:hover{filter:brightness(1.12)}
-.pd-info-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
-.pd-info-strip div{border:1px solid var(--line);padding:12px;text-align:center;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
-@media(max-width:850px){.pd-grid{grid-template-columns:1fr}.pd-main{min-height:430px}.pd-empty{min-height:430px}.pd-title{font-size:34px}}
-@media(max-width:560px){.pd-gallery{grid-template-columns:1fr}.pd-thumbs{order:2;flex-direction:row;overflow:auto}.pd-thumb{flex:0 0 62px;width:62px;height:72px}.pd-main{min-height:380px}.pd-actions{grid-template-columns:1fr}.pd-info-strip{grid-template-columns:1fr}}
+<style id="product-detail-enhancements">
+.product-card{cursor:pointer}
+.product-card .add-btn,.product-card .buy-btn,.product-card .wish,.product-card .size-pill{cursor:pointer}
+.product-detail-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);backdrop-filter:blur(12px);z-index:50000;display:none;align-items:center;justify-content:center;padding:24px;opacity:0;transition:opacity .25s ease}
+.product-detail-overlay.open{display:flex;opacity:1}
+.product-detail-panel{width:min(1080px,96vw);max-height:92vh;overflow:auto;background:#111;border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 100px rgba(0,0,0,.5);color:#fff;position:relative;transform:translateY(20px) scale(.98);transition:transform .3s ease;border-radius:18px}
+.product-detail-overlay.open .product-detail-panel{transform:none}
+.pd-close{position:absolute;right:16px;top:16px;width:44px;height:44px;border:1px solid rgba(255,255,255,.2);background:#171717;color:#fff;border-radius:50%;font-size:26px;z-index:2;cursor:pointer}
+.pd-grid{display:grid;grid-template-columns:1fr 1fr;gap:0}
+.pd-media{min-height:560px;background:#e9e6df;display:flex;align-items:center;justify-content:center;padding:40px}
+.pd-media img{max-width:100%;max-height:520px;object-fit:contain;filter:drop-shadow(0 22px 28px rgba(0,0,0,.2))}
+.pd-info{padding:56px 46px 44px}
+.pd-kicker{text-transform:uppercase;letter-spacing:.18em;font-size:11px;opacity:.55;margin-bottom:12px}
+.pd-title{font-size:clamp(30px,4vw,54px);line-height:.98;margin:0 0 14px;font-weight:800}
+.pd-price{font-size:25px;font-weight:800;margin-bottom:20px}
+.pd-desc{color:#c5c5c5;line-height:1.7;margin-bottom:22px}
+.pd-label{font-size:11px;letter-spacing:.15em;text-transform:uppercase;opacity:.6;margin:20px 0 9px}
+.pd-sizes,.pd-colors{display:flex;gap:8px;flex-wrap:wrap}
+.pd-size,.pd-color{border:1px solid rgba(255,255,255,.22);background:#181818;color:#fff;padding:10px 14px;border-radius:8px;cursor:pointer}
+.pd-size.active,.pd-color.active{background:#fff;color:#111;border-color:#fff}
+.pd-color{width:34px;height:34px;padding:0;border-radius:50%;position:relative}
+.pd-color.black{background:#090909}.pd-color.white{background:#eee}.pd-color.grey{background:#777}.pd-color.red{background:#8e1b1b}.pd-color.green{background:#2e5c45}.pd-color.blue{background:#263c65}
+.pd-color.active:after{content:'✓';position:absolute;inset:0;display:grid;place-items:center;color:#fff;text-shadow:0 1px 3px #000}
+.pd-qty{display:flex;align-items:center;width:max-content;border:1px solid rgba(255,255,255,.22);border-radius:9px;overflow:hidden}
+.pd-qty button{width:40px;height:40px;border:0;background:#181818;color:#fff;font-size:20px;cursor:pointer}.pd-qty span{width:45px;text-align:center}
+.pd-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+.pd-actions button{min-height:48px;border-radius:9px;border:1px solid rgba(255,255,255,.2);font-weight:800;cursor:pointer}
+.pd-add{background:#fff;color:#111}.pd-buy{background:#d71920;color:#fff;border-color:#d71920!important}
+.pd-secondary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.pd-secondary button{background:#181818;color:#fff}
+.pd-stock{font-size:12px;color:#9be49b;margin-top:14px}
+.cancel-order-btn{margin-top:12px;border:1px solid #9b3030;background:transparent;color:#ff8e8e;padding:9px 12px;border-radius:7px;cursor:pointer}
+.cancel-reason-wrap{margin-top:10px;padding:12px;border:1px solid rgba(255,255,255,.12);border-radius:8px;background:rgba(255,255,255,.03)}
+.cancel-reason-wrap select{width:100%;padding:9px;background:#111;color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px}
+.cancel-confirm-btn{margin-top:8px;width:100%;padding:9px;background:#b71922;color:#fff;border:0;border-radius:6px;cursor:pointer}
+.new-product-35-45{animation:pdFloat 5s ease-in-out infinite}.new-product-35-45:nth-child(2n){animation-delay:.4s}
+@keyframes pdFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media(max-width:760px){.pd-grid{grid-template-columns:1fr}.pd-media{min-height:360px;padding:25px}.pd-info{padding:38px 24px 28px}.pd-actions{grid-template-columns:1fr}.pd-secondary{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -1922,7 +1923,215 @@
         </div>
       </div>
 
-
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="35">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-35.png" alt="Product 35" onerror="this.onerror=null;this.src='assets/35/product-35.png';this.onerror=function(){this.onerror=null;this.src='assest/35/product-35.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 35</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="36">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-36.png" alt="Product 36" onerror="this.onerror=null;this.src='assets/36/product-36.png';this.onerror=function(){this.onerror=null;this.src='assest/36/product-36.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 36</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="37">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-37.png" alt="Product 37" onerror="this.onerror=null;this.src='assets/37/product-37.png';this.onerror=function(){this.onerror=null;this.src='assest/37/product-37.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 37</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="38">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-38.png" alt="Product 38" onerror="this.onerror=null;this.src='assets/38/product-38.png';this.onerror=function(){this.onerror=null;this.src='assest/38/product-38.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 38</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="39">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-39.png" alt="Product 39" onerror="this.onerror=null;this.src='assets/39/product-39.png';this.onerror=function(){this.onerror=null;this.src='assest/39/product-39.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 39</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="40">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-40.png" alt="Product 40" onerror="this.onerror=null;this.src='assets/40/product-40.png';this.onerror=function(){this.onerror=null;this.src='assest/40/product-40.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 40</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="41">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-41.png" alt="Product 41" onerror="this.onerror=null;this.src='assets/41/product-41.png';this.onerror=function(){this.onerror=null;this.src='assest/41/product-41.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 41</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="42">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-42.png" alt="Product 42" onerror="this.onerror=null;this.src='assets/42/product-42.png';this.onerror=function(){this.onerror=null;this.src='assest/42/product-42.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 42</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="43">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-43.png" alt="Product 43" onerror="this.onerror=null;this.src='assets/43/product-43.png';this.onerror=function(){this.onerror=null;this.src='assest/43/product-43.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 43</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="44">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-44.png" alt="Product 44" onerror="this.onerror=null;this.src='assets/44/product-44.png';this.onerror=function(){this.onerror=null;this.src='assest/44/product-44.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 44</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
+      <div class="product-card new-product-35-45" data-category="graphic" data-price="999" data-product-id="45">
+        <div class="product-thumb">
+          <span class="new-badge">New</span>
+          <img src="assets/product-45.png" alt="Product 45" onerror="this.onerror=null;this.src='assets/45/product-45.png';this.onerror=function(){this.onerror=null;this.src='assest/45/product-45.png';}">
+          <div class="wish"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9C.7 8 2 4.5 5.5 4c2-.3 3.7.7 4.5 2.2C10.8 4.7 12.5 3.7 14.5 4 18 4.5 19.3 8 17.5 12 15 16.5 12 21 12 21z"/></svg></div>
+        </div>
+        <div class="product-info">
+          <h3>Product 45</h3>
+          <div class="price">₹999</div>
+          <div class="rating"><span class="stars">★★★★</span><span class="rating-num">4.5</span><span class="rating-count">(New)</span></div>
+          <div class="size-row">
+            <button class="size-pill" data-size="S">S</button><button class="size-pill" data-size="M">M</button><button class="size-pill selected" data-size="L">L</button><button class="size-pill" data-size="XL">XL</button>
+          </div>
+          <div class="btn-row">
+            <button class="add-btn"><svg viewBox="0 0 24 24"><path d="M3 4h2l1.6 10.4a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>Add to Cart</button>
+            <button class="buy-btn">Buy Now</button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2007,6 +2216,28 @@
   <section class="social-manager wrap" id="social"><div class="eyebrow">CONNECT</div><h2 class="headline">Our Socials.</h2><div class="social-links"><a href="https://www.instagram.com/life_line2.o___/" target="_blank" rel="noopener">Instagram <span>@life_line2.o___</span></a><a href="#">YouTube <span>Add later</span></a><a href="#">Facebook <span>Add later</span></a><a href="#">Telegram <span>Add later</span></a></div></section>
   <div class="feature-overlay" id="trackingOverlay"><div class="feature-panel"><button class="feature-close" data-close="trackingOverlay">×</button><div class="eyebrow">ORDER TRACKING</div><h2>Track Your Order</h2><div class="track-search"><input id="trackingInput" placeholder="Enter Order ID"><button id="trackingBtn" type="button">TRACK</button></div><div id="trackingResult"></div></div></div>
   <div class="feature-overlay" id="confirmationOverlay"><div class="feature-panel confirmation-panel"><div class="confirm-icon">✓</div><div class="eyebrow">SUCCESS</div><h2>ORDER CONFIRMED</h2><p>Thank you for your order!</p><p>Your order has been received successfully.</p><div class="confirm-id" id="confirmationOrderId"></div><button class="btn btn-solid" id="visitShopBtn" type="button">VISIT OUR SHOP SITE →</button></div></div>
+
+<div class="product-detail-overlay" id="productDetailOverlay" aria-hidden="true">
+  <div class="product-detail-panel" role="dialog" aria-modal="true" aria-labelledby="pdTitle">
+    <button class="pd-close" id="pdClose" type="button" aria-label="Close product details">×</button>
+    <div class="pd-grid">
+      <div class="pd-media"><img id="pdImage" src="" alt="Product preview"></div>
+      <div class="pd-info">
+        <div class="pd-kicker">JS ASTHETIC WAYS · PRODUCT DETAILS</div>
+        <h2 class="pd-title" id="pdTitle">Product</h2>
+        <div class="pd-price" id="pdPrice">₹0</div>
+        <p class="pd-desc" id="pdDesc">Premium everyday streetwear with a clean aesthetic, comfortable fit and statement detailing.</p>
+        <div class="pd-label">Choose Size</div><div class="pd-sizes" id="pdSizes"></div>
+        <div class="pd-label">Choose Colour</div><div class="pd-colors" id="pdColors"></div>
+        <div class="pd-label">Quantity</div><div class="pd-qty"><button id="pdMinus" type="button">−</button><span id="pdQty">1</span><button id="pdPlus" type="button">+</button></div>
+        <div class="pd-stock">✓ Available to order</div>
+        <div class="pd-actions"><button class="pd-add" id="pdAdd" type="button">ADD TO CART</button><button class="pd-buy" id="pdBuy" type="button">BUY NOW</button></div>
+        <div class="pd-secondary"><button id="pdWish" type="button">♡ WISHLIST</button><button id="pdShare" type="button">↗ SHARE PRODUCT</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="collection-interface" id="collectionInterface" aria-hidden="true">
   <div class="collection-interface-head">
     <div class="wrap">
@@ -2252,35 +2483,31 @@
     // ============ SOUND EFFECTS ============
     var SOUNDS_ENABLED = true;
     var SOUNDS = {
-      addToCart: new Audio('sound effect/add-to-cart.mp3'),
-      checkout: new Audio('sound effect/checkout-success.mp3'),
-      wishlist: new Audio('sound effect/wishlist.mp3'),
-      coupon: new Audio('sound effect/coupon-applied.mp3'),
-      error: new Audio('sound effect/error.mp3'),
-      swoosh: new Audio('sound effect/swoosh.mp3'),
-      tick: new Audio('sound effect/tick.mp3'),
-      remove: new Audio('sound effect/remove.mp3'),
-      toggle: new Audio('sound effect/toggle.mp3'),
-      click: new Audio('sound effect/click.mp3')
+      addToCart: new Audio('assets/sounds/add-to-cart.mp3'),
+      checkout: new Audio('assets/sounds/checkout-success.mp3'),
+      wishlist: new Audio('assets/sounds/wishlist.mp3'),
+      coupon: new Audio('assets/sounds/coupon-applied.mp3'),
+      error: new Audio('assets/sounds/error.mp3'),
+      swoosh: new Audio('assets/sounds/swoosh.mp3'),
+      tick: new Audio('assets/sounds/tick.mp3'),
+      remove: new Audio('assets/sounds/remove.mp3'),
+      toggle: new Audio('assets/sounds/toggle.mp3'),
+      click: new Audio('assets/sounds/click.mp3')
     };
     Object.keys(SOUNDS).forEach(function(key){
       SOUNDS[key].preload = 'auto';
       SOUNDS[key].volume = 0.5;
     });
-    var __lastSoundAt = {};
     function playSound(key){
       if(!SOUNDS_ENABLED) return;
       try {
-        var now = Date.now();
-        if(__lastSoundAt[key] && now - __lastSoundAt[key] < 140) return;
-        __lastSoundAt[key] = now;
         var s = SOUNDS[key];
         if(!s) return;
         s.currentTime = 0;
-        var p = s.play();
-        if(p && typeof p.catch === 'function') p.catch(function(){});
+        s.play().catch(function(){ /* ignored: browser blocked autoplay before interaction */ });
       } catch(e){}
     }
+
     // ============ CART & WISHLIST SYSTEM ============
     // NOTE: WhatsApp numbers need the country code with no + or spaces (e.g. 91XXXXXXXXXX for India)
     var WHATSAPP_NUMBER = "919707286520";
@@ -2606,7 +2833,6 @@
               '</div>' +
               '<div class="order-actions">' +
                 '<button data-track="' + order.id + '">Track Order</button>' +
-                '<button data-cancel="' + order.id + '">Cancel Order</button>' +
                 '<button data-return="' + order.id + '">Return / Exchange</button>' +
               '</div>' +
               '<div class="order-actions" style="margin-top:8px;">' +
@@ -3020,79 +3246,34 @@ var tr=$('trackingOverlay');document.querySelectorAll('[href="#tracking"]').forE
 window.showOrderConfirmation=function(id){$('confirmationOrderId').textContent='Order ID: #'+id;$('confirmationOverlay').classList.add('open');playSound('checkout')};$('visitShopBtn').onclick=function(){$('confirmationOverlay').classList.remove('open');playSound('swoosh');$('shop').scrollIntoView({behavior:'smooth'})};
 var fb=JSON.parse(localStorage.getItem('js_feedback')||'[]'),rating=5;function esc(x){return String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}function renderFB(){var b=$('feedbackList');if(!b)return;b.innerHTML=fb.length?fb.slice(-6).reverse().map(f=>'<div class="feedback-card"><b>'+esc(f.name)+'</b><div>'+('★'.repeat(f.rating))+'</div><p>'+esc(f.text)+'</p></div>').join(''):'<div class="feedback-card">No reviews yet. Be the first!</div>'}renderFB();$('openFeedbackBtn').onclick=function(){$('feedbackForm').hidden=!$('feedbackForm').hidden;playSound('click')};document.querySelectorAll('#starPicker button').forEach(b=>b.onclick=function(){rating=+b.dataset.star;document.querySelectorAll('#starPicker button').forEach(x=>x.classList.toggle('selected',+x.dataset.star<=rating));playSound('tick')});document.querySelectorAll('#starPicker button').forEach(x=>{if(+x.dataset.star<=rating)x.classList.add('selected')});$('submitFeedback').onclick=function(){var n=$('feedbackName').value.trim()||'Customer',t=$('feedbackText').value.trim();if(!t){playSound('error');return}fb.push({name:n,rating:rating,text:t});localStorage.setItem('js_feedback',JSON.stringify(fb));$('feedbackName').value='';$('feedbackText').value='';$('feedbackForm').hidden=true;renderFB();playSound('success');showToast('Thank you for your feedback!')};
 var slider=$('heroSlides'),dots=$('heroDots'),idx=0;if(slider){var imgs=slider.querySelectorAll('img');imgs.forEach((_,i)=>{var d=document.createElement('button');d.onclick=function(){go(i)};dots.appendChild(d)});function go(i){idx=(i+imgs.length)%imgs.length;slider.style.transform='translateX(-'+idx*100+'%)';dots.querySelectorAll('button').forEach((d,j)=>d.classList.toggle('active',j===idx))}go(0);setInterval(()=>go(idx+1),3500);$('heroProductSlider').querySelector('.hero-prev').onclick=()=>go(idx-1);$('heroProductSlider').querySelector('.hero-next').onclick=()=>go(idx+1)}
-/* FIXED COLLECTION INTERFACE + TOP SEARCH */
+/* NEW COLLECTION INTERFACE: open with sound + flash, without breaking the existing shop */
 (function(){
   var ci=$('collectionInterface'), grid=$('collectionInterfaceGrid'), close=$('collectionClose');
   if(!ci||!grid)return;
 
-  function makeCollectionCard(sourceCard){
-    var clone=sourceCard.cloneNode(true);
-    clone.classList.add('in-view');
-    clone.style.display='block';
-    clone.style.opacity='1';
-    clone.style.transform='none';
-
-    /* Collection cards use the SAME real cart/wishlist logic as the main cards. */
-    var add=clone.querySelector('.add-btn');
-    var buy=clone.querySelector('.buy-btn');
-    var wish=clone.querySelector('.wish');
-    var sizePills=clone.querySelectorAll('.size-pill');
-
-    sizePills.forEach(function(pill){
-      pill.addEventListener('click',function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        sizePills.forEach(function(x){x.classList.remove('selected')});
-        pill.classList.add('selected');
-        playSound('click');
-      });
-    });
-
-    function product(){ return getProductFromCard(clone); }
-
-    if(add)add.addEventListener('click',function(ev){
-      ev.preventDefault(); ev.stopPropagation();
-      var item=product(); addToCart(item,1); playSound('addToCart');
-      showToast(item.name+' added to cart');
-    });
-
-    if(buy)buy.addEventListener('click',function(ev){
-      ev.preventDefault(); ev.stopPropagation();
-      var item=product(); addToCart(item,1); playSound('addToCart');
-      renderCart(); openDrawer('cartOverlay');
-    });
-
-    if(wish)wish.addEventListener('click',function(ev){
-      ev.preventDefault(); ev.stopPropagation();
-      var item=product();
-      var existing=wishlist.findIndex(function(x){return x.id===item.id});
-      if(existing===-1){
-        wishlist.push(item); wish.classList.add('liked'); playSound('wishlist');
-        showToast(item.name+' added to wishlist');
-      }else{
-        wishlist.splice(existing,1); wish.classList.remove('liked'); playSound('remove');
-        showToast(item.name+' removed from wishlist');
-      }
-      saveWishlist();
-    });
-
-    if(wish && wishlist.some(function(x){return x.id===product().id})) wish.classList.add('liked');
-    return clone;
-  }
-
   function openCollection(e){
-    if(e){e.preventDefault();e.stopPropagation();}
+    if(e){e.preventDefault();e.stopImmediatePropagation();}
     var sourceCards=Array.from(document.querySelectorAll('#productGrid .product-card'));
     grid.innerHTML='';
-    sourceCards.forEach(function(card){ grid.appendChild(makeCollectionCard(card)); });
-    ci.classList.remove('open','flash-open'); void ci.offsetWidth;
-    ci.classList.add('open','flash-open'); ci.setAttribute('aria-hidden','false');
+    sourceCards.forEach(function(card, index){
+      var clone=card.cloneNode(true);
+      clone.classList.add('in-view');
+      clone.style.animationDelay=(index*35)+'ms';
+      var add=clone.querySelector('.add-btn'), buy=clone.querySelector('.buy-btn'), wish=clone.querySelector('.wish');
+      if(add)add.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.add-btn')?.click();});
+      if(buy)buy.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.buy-btn')?.click();});
+      if(wish)wish.addEventListener('click',function(ev){ev.preventDefault();sourceCards[index].querySelector('.wish')?.click();});
+      grid.appendChild(clone);
+    });
+    ci.classList.remove('open','flash-open');void ci.offsetWidth;
+    ci.classList.add('open','flash-open');ci.setAttribute('aria-hidden','false');
     document.body.style.overflow='hidden';
-    playSound('swoosh');
+    try{playSound('collection')}catch(_){try{playSound('swoosh')}catch(__){}}
   }
-
   function closeCollection(){
-    ci.classList.remove('open','flash-open'); ci.setAttribute('aria-hidden','true');
-    document.body.style.overflow=''; playSound('click');
+    ci.classList.remove('open','flash-open');ci.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    try{playSound('click')}catch(_){}
   }
 
   document.addEventListener('click',function(e){
@@ -3103,756 +3284,104 @@ var slider=$('heroSlides'),dots=$('heroDots'),idx=0;if(slider){var imgs=slider.q
   ci.addEventListener('click',function(e){if(e.target===ci)closeCollection()});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&ci.classList.contains('open'))closeCollection()});
 })();
-
-/* TOP SEARCH: typing a product name immediately filters the real product grid
-   and automatically brings the results into view. */
-(function(){
-  var top=$('topProductSearch'), main=$('productSearch'), shop=$('shop');
-  if(!top||!main||!shop)return;
-  var scrolling=false;
-  top.addEventListener('input',function(){
-    main.value=top.value;
-    main.dispatchEvent(new Event('input',{bubbles:true}));
-    if(top.value.trim() && !scrolling){
-      scrolling=true;
-      shop.scrollIntoView({behavior:'smooth',block:'start'});
-      setTimeout(function(){scrolling=false;},650);
-    }
-  });
-})();
 orders.forEach(o=>{if(!o.status)o.status='Order Confirmed'});saveOrders();})();</script>
-<script id="final-fixes">
-(function(){
-  /* FINAL INTERACTION FIXES */
-  function $(id){ return document.getElementById(id); }
-  function safeSound(name){ try { if(typeof playSound==='function') playSound(name||'click'); } catch(e){} }
-
-  /* Make every product action work in both the main grid and Collection overlay. */
-  function productFromCard(card){
-    if(typeof getProductFromCard==='function') return getProductFromCard(card);
-    var name=card.querySelector('h3'), price=card.querySelector('.price'), img=card.querySelector('img'), size=card.querySelector('.size-pill.selected');
-    return {id:(name?name.textContent.trim():'Item')+(size?' - '+size.dataset.size:''),name:name?name.textContent.trim():'Item',size:size?size.dataset.size:null,price:price?parseInt(price.textContent.replace(/[^\d]/g,''),10):0,img:img?img.getAttribute('src'):''};
-  }
-  function toggleWish(card, button){
-    var item=productFromCard(card);
-    var i=wishlist.findIndex(function(x){return x.id===item.id;});
-    if(i<0){ wishlist.push(item); button.classList.add('liked'); safeSound('wishlist'); showToast(item.name+' added to wishlist'); }
-    else { wishlist.splice(i,1); button.classList.remove('liked'); safeSound('remove'); showToast(item.name+' removed from wishlist'); }
-    saveWishlist();
-  }
-  function bindCard(card){
-    if(!card || card.dataset.finalBound==='1') return;
-    card.dataset.finalBound='1';
-    card.querySelectorAll('.size-pill').forEach(function(b){
-      b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});b.classList.add('selected');safeSound('click');});
-    });
-    var add=card.querySelector('.add-btn'), buy=card.querySelector('.buy-btn'), wish=card.querySelector('.wish');
-    if(add) add.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var item=productFromCard(card);addToCart(item,1);safeSound('addToCart');showToast(item.name+' added to cart');});
-    if(buy) buy.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var item=productFromCard(card);addToCart(item,1);safeSound('addToCart');renderCart();openDrawer('cartOverlay');});
-    if(wish){ if(wishlist.some(function(x){return x.id===productFromCard(card).id})) wish.classList.add('liked'); wish.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();toggleWish(card,wish);}); }
-  }
-  document.querySelectorAll('.product-card').forEach(bindCard);
-
-  /* Collection cards are dynamically cloned; delegate actions so they ALWAYS work. */
-  var ci=$('collectionInterface');
-  if(ci) ci.addEventListener('click',function(e){
-    var b=e.target.closest('.add-btn,.buy-btn,.wish,.size-pill');
-    if(!b) return;
-    var card=b.closest('.product-card'); if(!card) return;
-    e.preventDefault(); e.stopPropagation();
-    if(b.classList.contains('size-pill')){card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});b.classList.add('selected');safeSound('click');return;}
-    if(b.classList.contains('add-btn')){var a=productFromCard(card);addToCart(a,1);safeSound('addToCart');showToast(a.name+' added to cart');return;}
-    if(b.classList.contains('buy-btn')){var q=productFromCard(card);addToCart(q,1);safeSound('addToCart');renderCart();openDrawer('cartOverlay');return;}
-    if(b.classList.contains('wish')){toggleWish(card,b);return;}
-  },true);
-
-  /* TOP SEARCH: filter the actual product cards immediately, then scroll to results. */
-  var top=$('topProductSearch'), main=$('productSearch'), grid=$('productGrid'), shop=$('shop');
-  if(top && grid){
-    var cards=Array.from(grid.querySelectorAll('.product-card'));
-    function doSearch(value){
-      var q=(value||'').trim().toLowerCase();
-      if(main) main.value=value;
-      cards.forEach(function(card){
-        var text=(card.innerText||'').toLowerCase();
-        card.style.display=(!q || text.indexOf(q)!==-1)?'':'none';
-      });
-      var visible=cards.filter(function(c){return c.style.display!== 'none';});
-      var old=grid.querySelector('.top-no-results'); if(old) old.remove();
-      if(q && visible.length===0){var m=document.createElement('div');m.className='top-no-results';m.style.cssText='grid-column:1/-1;padding:30px;text-align:center;border:1px solid var(--line);';m.textContent='No products found for “'+value+'”.';grid.appendChild(m);}
-      if(q && shop) setTimeout(function(){shop.scrollIntoView({behavior:'smooth',block:'start'});},40);
-    }
-    top.addEventListener('input',function(){doSearch(top.value);});
-    top.addEventListener('search',function(){doSearch(top.value);});
-  }
-
-  /* Sound fallback: any sound key requested but missing uses the normal click sound. */
-  if(typeof playSound==='function'){
-    var originalPlaySound=playSound;
-    window.playSound=function(key){ originalPlaySound(key); };
-  }
-
-  /* Give buttons that have no dedicated sound handler a click sound without duplicating
-     the main shopping buttons' existing effects. */
-  document.addEventListener('click',function(e){
-    var b=e.target.closest('button'); if(!b) return;
-    if(b.dataset.soundSkip==='1') return;
-    var known='.add-btn,.buy-btn,.wish,.size-pill,#checkoutBtn,#loadMoreBtn,.cat-tab,.hero-slide-btn,#soundToggle,#trackingBtn,#searchIcon,#cartIcon,#wishlistIcon,#collectionClose,#viewAllBtn,.modal-close,.drawer-item-remove,.drawer-item-move';
-    if(b.matches(known)) return;
-    safeSound('click');
-  },false);
-})();
-</script>
-
-
-<style id="interaction-fix-v2">
-/* Search results panel: appears immediately under the top search while typing. */
-.top-search-results{position:absolute;left:0;right:0;top:100%;background:var(--card);border:1px solid var(--line);box-shadow:0 18px 40px rgba(0,0,0,.28);display:none;z-index:9999;max-height:430px;overflow:auto}
-.top-search-results.open{display:block}
-.top-search-results-inner{max-width:1200px;margin:auto;padding:14px 20px}
-.top-search-result-list{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.top-search-result{border:1px solid var(--line);background:var(--bg);padding:8px;cursor:pointer;display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center}
-.top-search-result img{width:58px;height:68px;object-fit:cover;background:var(--bg-alt)}
-.top-search-result b{font-size:11px;line-height:1.25}.top-search-result span{font-size:10px;color:var(--ink-faint)}
-.top-search-no-results{padding:16px;text-align:center;color:var(--ink-faint);font-size:12px}
-@media(max-width:800px){.top-search-result-list{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:520px){.top-search-result-list{grid-template-columns:1fr}}
-</style>
-<script id="interaction-fix-v2-js">
-(function(){
-  'use strict';
-  function byId(id){return document.getElementById(id)}
-  function sound(name){try{if(typeof playSound==='function')playSound(name||'click')}catch(e){}}
-  function getCardProduct(card){
-    if(typeof getProductFromCard==='function') return getProductFromCard(card);
-    var n=card.querySelector('h3'), p=card.querySelector('.price'), im=card.querySelector('img'), z=card.querySelector('.size-pill.selected');
-    var name=n?n.textContent.trim():'Item', size=z?z.getAttribute('data-size'):null;
-    return {id:name+(size?' - '+size:''),name:name,size:size,price:p?parseInt(p.textContent.replace(/[^0-9]/g,''),10)||0:0,img:im?im.getAttribute('src')||'':''};
-  }
-  function wish(card,btn){
-    var item=getCardProduct(card), i=wishlist.findIndex(function(x){return x.id===item.id});
-    if(i<0){wishlist.push(item);btn.classList.add('liked');sound('wishlist');showToast(item.name+' added to wishlist')}
-    else{wishlist.splice(i,1);btn.classList.remove('liked');sound('remove');showToast(item.name+' removed from wishlist')}
-    saveWishlist();
-  }
-  function cartAdd(card){var item=getCardProduct(card);addToCart(item,1);sound('addToCart');updateCartCount();showToast(item.name+' added to cart');return item}
-  function action(btn){
-    var card=btn.closest('.product-card'); if(!card)return;
-    if(btn.classList.contains('size-pill')){
-      card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});
-      btn.classList.add('selected'); sound('click'); return;
-    }
-    if(btn.classList.contains('add-btn')){cartAdd(card);return}
-    if(btn.classList.contains('buy-btn')){
-      cartAdd(card); renderCart(); openDrawer('cartOverlay'); return;
-    }
-    if(btn.classList.contains('wish')){wish(card,btn);return}
-  }
-  /* One capture handler controls the shopping buttons. This also catches dynamically-created Collection cards. */
-  document.addEventListener('click',function(e){
-    var btn=e.target.closest('button.add-btn,button.buy-btn,button.size-pill');
-    if(btn){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();action(btn);return;}
-  },true);
-
-  /* Every other button gets a click sound too, without replacing its own functional handler. */
-  document.addEventListener('click',function(e){
-    var btn=e.target.closest('button');
-    if(!btn)return;
-    if(btn.matches('.add-btn,.buy-btn,.wish,.size-pill'))return;
-    sound('click');
-  },false);
-
-  /* Top search: filter the actual shop AND show matching products directly beneath the search. */
-  var top=byId('topProductSearch'), main=byId('productSearch'), grid=byId('productGrid'), shop=byId('shop'), wrap=document.querySelector('.top-search-inner');
-  if(top&&grid&&wrap){
-    var panel=document.createElement('div'); panel.className='top-search-results';
-    panel.innerHTML='<div class="top-search-results-inner"><div class="top-search-result-list"></div><div class="top-search-no-results" hidden></div></div>';
-    wrap.appendChild(panel);
-    var list=panel.querySelector('.top-search-result-list'), empty=panel.querySelector('.top-search-no-results');
-    function cards(){return Array.from(grid.querySelectorAll('.product-card'))}
-    function search(q){
-      q=(q||'').trim().toLowerCase();
-      if(main && main.value!==q && main.value!==top.value) main.value=top.value;
-      var matches=cards().filter(function(c){return (c.innerText||'').toLowerCase().indexOf(q)!==-1});
-      if(!q){panel.classList.remove('open');return}
-      list.innerHTML=matches.slice(0,12).map(function(c,i){
-        var item=getCardProduct(c), safeName=String(item.name).replace(/[&<>\"]/g,function(x){return {'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&#92;','"':'&quot;'}[x]});
-        return '<div class="top-search-result" data-result-index="'+i+'"><img src="'+String(item.img).replace(/"/g,'&quot;')+'" alt=""><div><b>'+safeName+'</b><br><span>₹'+item.price+'</span></div></div>';
-      }).join('');
-      empty.hidden=matches.length>0; empty.textContent=matches.length?'':'No products found for “'+top.value+'”.';
-      panel.classList.add('open');
-      if(main){main.value=top.value;main.dispatchEvent(new Event('input',{bubbles:true}))}
-      setTimeout(function(){if(shop)shop.scrollIntoView({behavior:'smooth',block:'start'})},30);
-      list.querySelectorAll('.top-search-result').forEach(function(r){r.addEventListener('click',function(){
-        var idx=parseInt(r.getAttribute('data-result-index'),10), c=matches[idx];
-        panel.classList.remove('open'); if(c){c.scrollIntoView({behavior:'smooth',block:'center'});sound('click')}
-      })});
-    }
-    top.addEventListener('input',function(){search(top.value)});
-    top.addEventListener('search',function(){search(top.value)});
-    document.addEventListener('click',function(e){if(!wrap.contains(e.target))panel.classList.remove('open')});
-  }
-
-  /* Make all action buttons explicit non-submit buttons. */
-  document.querySelectorAll('button.add-btn,button.buy-btn,button.wish,button.size-pill').forEach(function(b){b.type='button'});
-})();
-</script>
-
-
-<style id="final-shopping-fix">
-/* Final fix: Collection sits above drawers, so action feedback/drawers must also sit above it. */
-.collection-interface{z-index:20000}
-.drawer-overlay{z-index:30000}
-.toast{z-index:31000}
-.top-search-results{z-index:32000}
-</style>
-<script id="final-shopping-fix-js">
-(function(){
-  'use strict';
-  function el(id){ return document.getElementById(id); }
-  function sound(key){ try { if(typeof playSound==='function') playSound(key || 'click'); } catch(e){} }
-  function toast(msg){ try { if(typeof showToast==='function') showToast(msg); } catch(e){} }
-
-  function productFrom(card){
-    if(!card) return null;
-    var img=card.querySelector('.product-thumb img, img');
-    var name=card.querySelector('h3');
-    var price=card.querySelector('.price');
-    var size=card.querySelector('.size-pill.selected');
-    var n=name ? name.textContent.trim() : 'Item';
-    var z=size ? size.getAttribute('data-size') : null;
-    var p=price ? parseInt(price.textContent.replace(/[^0-9]/g,''),10) || 0 : 0;
-    return {id:n+(z?' - '+z:''),name:n,size:z,price:p,img:img ? (img.getAttribute('src')||'') : ''};
-  }
-
-  function add(card){
-    var item=productFrom(card);
-    if(!item) return null;
-    if(typeof addToCart==='function') addToCart(item,1);
-    sound('addToCart');
-    if(typeof updateCartCount==='function') updateCartCount();
-    toast(item.name+' added to cart');
-    return item;
-  }
-
-  function toggleWishlistItem(card,button){
-    var item=productFrom(card);
-    if(!item) return;
-    var i=wishlist.findIndex(function(x){return x.id===item.id;});
-    if(i===-1){
-      wishlist.push(item);
-      if(button) button.classList.add('liked');
-      sound('wishlist');
-      toast(item.name+' added to wishlist');
-    }else{
-      wishlist.splice(i,1);
-      if(button) button.classList.remove('liked');
-      sound('remove');
-      toast(item.name+' removed from wishlist');
-    }
-    if(typeof saveWishlist==='function') saveWishlist();
-    if(typeof updateWishlistCount==='function') updateWishlistCount();
-  }
-
-  function closeCollectionForDrawer(){
-    var ci=el('collectionInterface');
-    if(ci && ci.classList.contains('open')){
-      ci.classList.remove('open','flash-open');
-      ci.setAttribute('aria-hidden','true');
-      document.body.style.overflow='';
-    }
-  }
-
-  /* One highest-priority handler for Collection buttons. */
-  document.addEventListener('click',function(e){
-    var button=e.target.closest('#collectionInterface .product-card .add-btn, #collectionInterface .product-card .buy-btn, #collectionInterface .product-card .wish, #collectionInterface .product-card .size-pill');
-    if(!button) return;
-    var card=button.closest('.product-card');
-    if(!card) return;
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-
-    if(button.classList.contains('size-pill')){
-      card.querySelectorAll('.size-pill').forEach(function(x){x.classList.remove('selected')});
-      button.classList.add('selected');
-      sound('click');
-      return;
-    }
-    if(button.classList.contains('add-btn')){
-      add(card);
-      return;
-    }
-    if(button.classList.contains('wish')){
-      toggleWishlistItem(card,button);
-      return;
-    }
-    if(button.classList.contains('buy-btn')){
-      var item=add(card);
-      if(!item) return;
-      /* The drawer was below Collection before; close Collection first, then open Cart. */
-      closeCollectionForDrawer();
-      setTimeout(function(){
-        if(typeof renderCart==='function') renderCart();
-        if(typeof openDrawer==='function') openDrawer('cartOverlay');
-      },30);
-      return;
-    }
-  },true);
-
-  /* Top search: instant filtering + matching cards visible in the shop. */
-  (function(){
-    var top=el('topProductSearch'), shop=el('shop'), grid=el('productGrid');
-    if(!top || !grid) return;
-
-    function run(q){
-      q=(q||'').trim().toLowerCase();
-      var cards=Array.from(grid.querySelectorAll('.product-card'));
-      cards.forEach(function(card){
-        var text=(card.innerText || card.textContent || '').toLowerCase();
-        card.style.display=(!q || text.indexOf(q)!==-1) ? '' : 'none';
-      });
-
-      var old=grid.querySelector('.final-search-empty');
-      if(old) old.remove();
-      var matches=cards.filter(function(c){return c.style.display!=='none'});
-      if(q && !matches.length){
-        var empty=document.createElement('div');
-        empty.className='final-search-empty';
-        empty.style.cssText='grid-column:1/-1;padding:32px;text-align:center;border:1px solid var(--line);color:var(--ink-faint);';
-        empty.textContent='No products found for “'+(top.value||'')+'”.';
-        grid.appendChild(empty);
-      }
-      if(q && shop){
-        setTimeout(function(){shop.scrollIntoView({behavior:'smooth',block:'start'});},20);
-      }
-    }
-
-    top.addEventListener('input',function(){
-      var main=el('productSearch');
-      if(main) main.value=top.value;
-      run(top.value);
-    },true);
-    top.addEventListener('search',function(){run(top.value);},true);
-  })();
-
-  /* Keep every shopping button explicitly non-submit. */
-  document.querySelectorAll('.add-btn,.buy-btn,.wish,.size-pill').forEach(function(b){b.type='button';});
-})();
-</script>
-
-<script id="wishlist-final-fix">
-(function(){
-  'use strict';
-  function sound(k){try{if(typeof playSound==='function')playSound(k||'click')}catch(e){}}
-  function toast(m){try{if(typeof showToast==='function')showToast(m)}catch(e){}}
-  function product(card){
-    if(typeof getProductFromCard==='function') return getProductFromCard(card);
-    var n=card.querySelector('h3'), p=card.querySelector('.price'), im=card.querySelector('img'), z=card.querySelector('.size-pill.selected');
-    return {id:(n?n.textContent.trim():'Item')+(z?' - '+z.dataset.size:''),name:n?n.textContent.trim():'Item',size:z?z.dataset.size:null,price:p?parseInt(p.textContent.replace(/\D/g,''),10)||0:0,img:im?im.src:''};
-  }
-  function toggle(card,w){
-    var item=product(card), i=wishlist.findIndex(function(x){return x.id===item.id;});
-    if(i===-1){wishlist.push(item);w.classList.add('liked');sound('wishlist');toast(item.name+' added to wishlist');}
-    else{wishlist.splice(i,1);w.classList.remove('liked');sound('remove');toast(item.name+' removed from wishlist');}
-    localStorage.setItem('js_wishlist',JSON.stringify(wishlist));
-    if(typeof updateWishlistCount==='function')updateWishlistCount();
-    if(typeof renderWishlist==='function')renderWishlist();
-  }
-  document.addEventListener('click',function(e){
-    var w=e.target.closest('.wish');
-    if(!w)return;
-    var card=w.closest('.product-card');
-    if(!card)return;
-    e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
-    toggle(card,w);
-  },true);
-  document.querySelectorAll('.wish').forEach(function(w){
-    var c=w.closest('.product-card');
-    if(c && wishlist.some(function(x){return x.id===product(c).id}))w.classList.add('liked');
-  });
-  var wi=document.getElementById('wishlistIcon');
-  if(wi)wi.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(typeof renderWishlist==='function')renderWishlist();if(typeof openDrawer==='function')openDrawer('wishlistOverlay');},true);
-})();
-</script>
-
-<!-- Universal Product Detail -->
-<div class="product-detail-overlay" id="productDetailOverlay" aria-hidden="true">
-  <div class="product-detail-panel" role="dialog" aria-modal="true">
-    <div class="pd-head">
-      <b>PRODUCT DETAILS</b>
-      <button class="pd-close" id="pdClose" type="button" aria-label="Close">×</button>
-    </div>
-    <div class="pd-grid">
-      <div class="pd-gallery">
-        <div class="pd-thumbs" id="pdThumbs"></div>
-        <div class="pd-main" id="pdMainWrap"><img id="pdMainImage" alt=""></div>
-      </div>
-      <div>
-        <div class="pd-eyebrow" id="pdNumber">PRODUCT</div>
-        <h2 class="pd-title" id="pdName">Product</h2>
-        <div class="pd-price" id="pdPrice">₹0</div>
-        <p class="pd-copy" id="pdDescription">Premium streetwear product. Select your size, colour and quantity before ordering.</p>
-
-        <label class="pd-label">Size Select</label>
-        <div class="size-row" id="pdSizes"></div>
-
-        <label class="pd-label">Colour</label>
-        <div class="pd-swatches" id="pdColors">
-          <button class="pd-color selected" type="button" data-color="Black">Black</button>
-          <button class="pd-color" type="button" data-color="White">White</button>
-          <button class="pd-color" type="button" data-color="Olive">Olive</button>
-          <button class="pd-color" type="button" data-color="Navy">Navy</button>
-        </div>
-
-        <label class="pd-label">Quantity</label>
-        <div class="pd-qty"><button id="pdQtyMinus" type="button">−</button><span id="pdQty">1</span><button id="pdQtyPlus" type="button">+</button></div>
-
-        <div class="pd-actions">
-          <button class="pd-action" id="pdWishlist" type="button">♡ Wishlist</button>
-          <button class="pd-action" id="pdShare" type="button">↗ Share Product</button>
-          <button class="pd-action" id="pdAdd" type="button">Add to Cart</button>
-          <button class="pd-action primary" id="pdBuy" type="button">Buy Now</button>
-        </div>
-        <div class="pd-info-strip">
-          <div id="pdSecure">✓ Secure Order</div>
-          <div id="pdSupport">☏ WhatsApp Support</div>
-          <div>⌁ Easy Order</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<script id="final-product-detail-js">
+<script id="product-detail-and-cancel-enhancements">
 (function(){
   'use strict';
   var overlay=document.getElementById('productDetailOverlay');
   if(!overlay) return;
-  var current=null, qty=1, selectedSize='L', selectedColor='Black';
-
-  function $(id){return document.getElementById(id)}
-  function snd(k){try{if(typeof playSound==='function')playSound(k||'click')}catch(e){}}
-  function toast(m){try{if(typeof showToast==='function')showToast(m)}catch(e){}}
-
-  function product(card){
-    var img=card.querySelector('.product-thumb img');
-    var name=card.querySelector('h3');
-    var price=card.querySelector('.price');
-    var size=card.querySelector('.size-pill.selected') || card.querySelector('.size-pill');
-    return {
-      card:card,
-      number:card.dataset.productNumber || '',
-      name:name?name.textContent.trim():'Product',
-      price:price?parseInt(price.textContent.replace(/\D/g,''),10)||0:0,
-      img:img?img.getAttribute('src'):'',
-      size:size?size.dataset.size:'L'
-    };
+  var current=null, selectedSize='L', selectedColor='Black', qty=1;
+  var colors=[['black','Black'],['white','White'],['grey','Grey'],['red','Red'],['green','Green'],['blue','Blue']];
+  function esc(v){return String(v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+  function syncWish(){
+    if(!current) return;
+    var id=current.name+' - '+selectedSize;
+    var liked=wishlist.some(function(i){return i.id===id || i.name===current.name;});
+    document.getElementById('pdWish').textContent=liked?'♥ WISHLISTED':'♡ WISHLIST';
   }
-
-  function candidates(p){
-    var n=p.number || '';
-    if(!n) return [p.img];
-    return [
-      p.img,
-      'assets/product-'+n+'/1.jpg','assets/product-'+n+'/1.jpeg','assets/product-'+n+'/1.png','assets/product-'+n+'/1.webp',
-      'assets/product-'+n+'/2.jpg','assets/product-'+n+'/2.jpeg','assets/product-'+n+'/2.png','assets/product-'+n+'/2.webp',
-      'assets/product-'+n+'/3.jpg','assets/product-'+n+'/3.jpeg','assets/product-'+n+'/3.png','assets/product-'+n+'/3.webp',
-      'assets/product-'+n+'/4.jpg','assets/product-'+n+'/4.jpeg','assets/product-'+n+'/4.png','assets/product-'+n+'/4.webp'
-    ];
-  }
-
-  function loadGallery(p){
-    var thumbs=$('pdThumbs'), main=$('pdMainImage'), wrap=$('pdMainWrap');
-    thumbs.innerHTML='';
-    var list=[], pending=0;
-    var seen={};
-    candidates(p).forEach(function(src){
-      if(!src || seen[src]) return;
-      seen[src]=true;
-      if(src===p.img){
-        list.push(src);
-      }else{
-        pending++;
-        var test=new Image();
-        test.onload=function(){list.push(src);pending--;if(pending===0)render();};
-        test.onerror=function(){pending--;if(pending===0)render();};
-        test.src=src;
-      }
-    });
-    if(pending===0) render();
-
-    function render(){
-      var unique=list.filter(function(s,i,a){return a.indexOf(s)===i});
-      if(!unique.length) unique=[p.img];
-      main.src=unique[0]; main.alt=p.name; main.style.display='';
-      unique.forEach(function(src,i){
-        var b=document.createElement('button'); b.type='button'; b.className='pd-thumb'+(i===0?' active':'');
-        var im=document.createElement('img'); im.src=src; im.alt=p.name+' view '+(i+1); b.appendChild(im);
-        b.onclick=function(){
-          main.src=src; main.style.display='';
-          thumbs.querySelectorAll('.pd-thumb').forEach(function(x){x.classList.remove('active')});
-          b.classList.add('active'); snd('click');
-        };
-        thumbs.appendChild(b);
-      });
-    }
-  }
-
-  function renderSizes(){
-    var box=$('pdSizes'); box.innerHTML='';
-    ['S','M','L','XL','XXL'].forEach(function(s){
-      var b=document.createElement('button'); b.type='button'; b.className='size-pill'+(s===selectedSize?' selected':'');
-      b.dataset.size=s;b.textContent=s;
-      b.onclick=function(){selectedSize=s;renderSizes();snd('click')};
-      box.appendChild(b);
-    });
-  }
-
   function open(card){
-    current=product(card); qty=1; selectedSize=current.size||'L'; selectedColor='Black';
-    $('pdNumber').textContent='PRODUCT '+(current.number||'');
-    $('pdName').textContent=current.name;
-    $('pdPrice').textContent='₹'+current.price;
-    $('pdDescription').textContent=current.name+' — premium streetwear piece. Choose your preferred size, colour and quantity before ordering.';
-    $('pdQty').textContent='1';
-    $('pdColors').querySelectorAll('.pd-color').forEach(function(b){b.classList.toggle('selected',b.dataset.color==='Black')});
-    renderSizes(); loadGallery(current);
-    overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); document.body.classList.add('modal-locked'); snd('swoosh');
+    current=getProductFromCard(card); if(!current)return;
+    selectedSize=current.size||'L'; selectedColor='Black'; qty=1;
+    var img=card.querySelector('.product-thumb img');
+    var imageSrc=img?img.getAttribute('src'):current.img;
+    document.getElementById('pdImage').src=imageSrc;
+    document.getElementById('pdImage').onerror=function(){this.onerror=null; this.src='assets/'+(card.getAttribute('data-product-id')||'')+'/product-'+(card.getAttribute('data-product-id')||'')+'.png';};
+    document.getElementById('pdTitle').textContent=current.name;
+    document.getElementById('pdPrice').textContent='₹'+current.price;
+    document.getElementById('pdDesc').textContent='Premium streetwear piece from JS Asthetic Ways. Choose your size, colour and quantity, then add it to cart, buy now, wishlist it or share this product.';
+    document.getElementById('pdQty').textContent=qty;
+    document.getElementById('pdSizes').innerHTML=['S','M','L','XL'].map(function(x){return '<button type="button" class="pd-size '+(x===selectedSize?'active':'')+'" data-size="'+x+'">'+x+'</button>';}).join('');
+    document.getElementById('pdColors').innerHTML=colors.map(function(c){return '<button type="button" title="'+c[1]+'" class="pd-color '+c[0]+' '+(c[1]===selectedColor?'active':'')+'" data-color="'+c[1]+'"></button>';}).join('');
+    overlay.classList.add('open');overlay.setAttribute('aria-hidden','false');document.body.classList.add('modal-locked');
+    playSound('swoosh');syncWish();
   }
-
-  function close(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('modal-locked');snd('swoosh')}
-
-  function item(){
-    return {id:current.name+' - '+selectedSize+' - '+selectedColor,name:current.name,size:selectedSize,color:selectedColor,price:current.price,img:current.img,qty:qty};
-  }
-
-  $('pdClose').onclick=close;
-  overlay.addEventListener('click',function(e){if(e.target===overlay)close()});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close()});
-
-  $('pdQtyMinus').onclick=function(){qty=Math.max(1,qty-1);$('pdQty').textContent=qty;snd('click')};
-  $('pdQtyPlus').onclick=function(){qty=Math.min(20,qty+1);$('pdQty').textContent=qty;snd('click')};
-  $('pdColors').querySelectorAll('.pd-color').forEach(function(b){
-    b.onclick=function(){selectedColor=b.dataset.color;$('pdColors').querySelectorAll('.pd-color').forEach(function(x){x.classList.remove('selected')});b.classList.add('selected');snd('tick')};
-  });
-
-  $('pdAdd').onclick=function(){
-    if(!current)return; var it=item();
-    if(typeof addToCart==='function')addToCart(it,qty);
-    snd('addToCart');toast(current.name+' added to cart');
-  };
-  $('pdBuy').onclick=function(){
-    if(!current)return; var it=item();
-    if(typeof addToCart==='function')addToCart(it,qty);
-    snd('addToCart'); close();
-    setTimeout(function(){if(typeof renderCart==='function')renderCart();if(typeof openDrawer==='function')openDrawer('cartOverlay')},80);
-  };
-  $('pdWishlist').onclick=function(){
-    if(!current)return; var it=item(), idx=wishlist.findIndex(function(x){return x.id===it.id});
-    if(idx<0){wishlist.push(it);snd('wishlist');toast(current.name+' added to wishlist')}
-    else{wishlist.splice(idx,1);snd('remove');toast(current.name+' removed from wishlist')}
-    if(typeof saveWishlist==='function')saveWishlist();
-    if(typeof updateWishlistCount==='function')updateWishlistCount();
-  };
-  $('pdShare').onclick=function(){
-    if(!current)return;
-    var url=location.href.split('#')[0]+'#product-'+(current.number||'');
-    if(navigator.share){navigator.share({title:current.name,text:'Check out '+current.name,url:url}).then(function(){snd('tick')}).catch(function(){})}
-    else{navigator.clipboard&&navigator.clipboard.writeText(url);snd('tick');toast('Product link copied')}
-  };
-  $('pdSupport').onclick=function(){
-    var msg=encodeURIComponent('Hi! I need support for '+(current?current.name:'a product')+'.');
-    window.open('https://wa.me/919707286520?text='+msg,'_blank');snd('swoosh');
-  };
-
-  // Open details when the product image/card is clicked, but leave action buttons alone.
+  function close(){overlay.classList.remove('open');overlay.setAttribute('aria-hidden','true');document.body.classList.remove('modal-locked');playSound('click');}
+  function product(){return {id:current.name+' - '+selectedSize,name:current.name,size:selectedSize,color:selectedColor,qty:qty,price:current.price,img:document.getElementById('pdImage').src};}
   document.addEventListener('click',function(e){
     var card=e.target.closest('.product-card');
-    if(!card)return;
-    if(e.target.closest('.add-btn,.buy-btn,.wish,.size-pill,.pd-action,button,a,input,select,textarea'))return;
-    if(card.closest('#collectionInterface'))return;
-    e.preventDefault();
-    open(card);
-  },true);
-
-  // Make product cards keyboard-accessible.
-  document.querySelectorAll('.product-card').forEach(function(card){
-    card.setAttribute('tabindex','0');
-    card.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button,input,a,select,textarea')){e.preventDefault();open(card)}});
+    if(card && !e.target.closest('button,.wish,.size-pill')){e.preventDefault();open(card);}
+  });
+  document.getElementById('pdClose').addEventListener('click',close);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&overlay.classList.contains('open'))close();});
+  document.getElementById('pdSizes').addEventListener('click',function(e){var b=e.target.closest('.pd-size');if(!b)return;selectedSize=b.dataset.size;this.querySelectorAll('.pd-size').forEach(function(x){x.classList.toggle('active',x===b)});playSound('click');syncWish();});
+  document.getElementById('pdColors').addEventListener('click',function(e){var b=e.target.closest('.pd-color');if(!b)return;selectedColor=b.dataset.color;this.querySelectorAll('.pd-color').forEach(function(x){x.classList.toggle('active',x===b)});playSound('click');});
+  document.getElementById('pdMinus').addEventListener('click',function(){qty=Math.max(1,qty-1);document.getElementById('pdQty').textContent=qty;playSound('click');});
+  document.getElementById('pdPlus').addEventListener('click',function(){qty=Math.min(20,qty+1);document.getElementById('pdQty').textContent=qty;playSound('click');});
+  document.getElementById('pdAdd').addEventListener('click',function(){var p=product();addToCart(p,qty);playSound('addToCart');showToast(p.name+' added to cart');renderCart();});
+  document.getElementById('pdBuy').addEventListener('click',function(){var p=product();addToCart(p,qty);playSound('addToCart');renderCart();close();openDrawer('cartOverlay');});
+  document.getElementById('pdWish').addEventListener('click',function(){
+    var p=product(); var idx=wishlist.findIndex(function(i){return i.id===p.id || i.name===p.name;});
+    if(idx<0){wishlist.push(p);playSound('wishlist');showToast('Added to wishlist');}else{wishlist.splice(idx,1);playSound('remove');showToast('Removed from wishlist');}
+    saveWishlist();syncWish();
+  });
+  document.getElementById('pdShare').addEventListener('click',async function(){
+    var text='Check out '+current.name+' from JS Asthetic Ways — ₹'+current.price;
+    try{if(navigator.share){await navigator.share({title:current.name,text:text,url:location.href});}else{await navigator.clipboard.writeText(location.href);showToast('Product link copied');}}catch(_){showToast('Share cancelled');} playSound('click');
   });
 })();
-</script>
 
-
-<script id="final-cancel-js">
+// Add cancellation controls to the existing My Orders drawer without changing the checkout flow.
 (function(){
-  function snd(k){try{if(typeof playSound==='function')playSound(k||'click')}catch(e){}}
-  function render(){try{if(typeof renderOrders==='function')renderOrders()}catch(e){}}
-  document.addEventListener('click',function(e){
-    var b=e.target.closest('[data-cancel]');
-    if(!b)return;
-    var id=String(b.getAttribute('data-cancel'));
-    var reason=prompt('Why do you want to cancel Order #'+id+'?\nExample: Wrong size, Changed mind, Ordered by mistake.');
-    if(reason===null)return;
-    reason=reason.trim();
-    if(!reason){snd('error');alert('Please enter a cancellation reason.');return}
+  function cancelOrder(id, reason){
     var orders=JSON.parse(localStorage.getItem('js_orders')||'[]');
-    var o=orders.find(function(x){return String(x.id)===id});
-    if(!o){snd('error');return}
-    if(o.status==='Cancelled'){alert('This order is already cancelled.');return}
-    o.status='Cancelled';o.cancelReason=reason;o.cancelledAt=new Date().toLocaleString();
-    localStorage.setItem('js_orders',JSON.stringify(orders));
-    snd('remove');alert('Order #'+id+' cancelled.\\nReason: '+reason);
-    render();
-  },true);
-})();
-</script>
-
-
-<script id="product-detail-button-final-fix">
-(function(){
-  'use strict';
-  var $=function(id){return document.getElementById(id)};
-  var overlay=$('productDetailOverlay');
-  if(!overlay) return;
-  var current=null, qty=1, selectedSize='L', selectedColor='Black';
-
-  function sound(name){
-    try{ if(typeof window.playSound==='function') window.playSound(name||'click'); }catch(e){}
+    var o=orders.find(function(x){return String(x.id)===String(id)}); if(!o)return;
+    o.status='Cancelled'; o.cancelReason=reason; localStorage.setItem('js_orders',JSON.stringify(orders));
+    if(typeof window.renderOrders==='function') window.renderOrders();
+    playSound('error');showToast('Order #'+id+' cancelled');
   }
-  function toast(msg){
-    try{ if(typeof window.showToast==='function') window.showToast(msg); }catch(e){}
-  }
-  function cardFromCurrent(){ return current && current.card ? current.card : null; }
-  function getProduct(){
-    var card=cardFromCurrent();
-    var name=card&&card.querySelector('h3'), price=card&&card.querySelector('.price'), img=card&&card.querySelector('.product-thumb img');
-    return {
-      id:(current.number||current.name||'product')+'-'+selectedSize+'-'+selectedColor,
-      name:current.name, price:current.price, img:current.img || (img?img.getAttribute('src'):'') ,
-      size:selectedSize, color:selectedColor, qty:qty,
-      number:current.number||''
+  var oldRender=window.renderOrders;
+  if(typeof oldRender==='function'){
+    window.renderOrders=function(){
+      oldRender();
+      var body=document.getElementById('ordersBody'); if(!body)return;
+      var orders=JSON.parse(localStorage.getItem('js_orders')||'[]');
+      body.querySelectorAll('.order-card').forEach(function(card,idx){
+        var order=orders.slice().reverse()[idx]; if(!order)return;
+        if(order.status==='Cancelled'){
+          var note=document.createElement('div');note.style.cssText='margin-top:10px;color:#ff8e8e;font-size:12px';note.textContent='Cancelled: '+(order.cancelReason||'Reason not provided');card.appendChild(note);return;
+        }
+        var b=document.createElement('button');b.className='cancel-order-btn';b.type='button';b.textContent='Cancel Order';
+        b.addEventListener('click',function(){
+          if(card.querySelector('.cancel-reason-wrap'))return;
+          var wrap=document.createElement('div');wrap.className='cancel-reason-wrap';wrap.innerHTML='<select><option value="">Why are you cancelling?</option><option>Changed my mind</option><option>Ordered by mistake</option><option>Found a better price</option><option>Delivery time is too long</option><option>Wrong size/colour</option><option>Other</option></select><button type="button" class="cancel-confirm-btn">Confirm Cancellation</button>';
+          card.appendChild(wrap);
+          wrap.querySelector('.cancel-confirm-btn').addEventListener('click',function(){var r=wrap.querySelector('select').value;if(!r){playSound('error');showToast('Please select a cancellation reason');return;}cancelOrder(order.id,r);});
+          playSound('click');
+        });
+        card.appendChild(b);
+      });
     };
   }
-  function refreshCart(){
-    try{ if(typeof window.renderCart==='function') window.renderCart(); }catch(e){}
-    try{ if(typeof window.updateCartCount==='function') window.updateCartCount(); }catch(e){}
-  }
-  function refreshWish(){
-    try{ if(typeof window.saveWishlist==='function') window.saveWishlist(); else localStorage.setItem('js_wishlist',JSON.stringify(window.wishlist||[])); }catch(e){}
-    try{ if(typeof window.updateWishlistCount==='function') window.updateWishlistCount(); }catch(e){}
-  }
-  function openCart(){
-    try{ if(typeof window.openDrawer==='function') window.openDrawer('cartOverlay'); }
-    catch(e){ var c=$('cartOverlay'); if(c)c.classList.add('open'); }
-  }
-  function closeDetail(){
-    overlay.classList.remove('open');
-    overlay.setAttribute('aria-hidden','true');
-    document.body.classList.remove('modal-locked');
-    sound('swoosh');
-  }
-
-  // Replace the old product-detail handlers so every button has exactly ONE action/sound.
-  var close=$('pdClose');
-  if(close) close.onclick=closeDetail;
-
-  var minus=$('pdQtyMinus'), plus=$('pdQtyPlus');
-  if(minus) minus.onclick=function(e){e.preventDefault();qty=Math.max(1,qty-1);$('pdQty').textContent=qty;sound('click');};
-  if(plus) plus.onclick=function(e){e.preventDefault();qty=Math.min(20,qty+1);$('pdQty').textContent=qty;sound('click');};
-
-  document.querySelectorAll('#pdColors .pd-color').forEach(function(b){
-    b.onclick=function(e){
-      e.preventDefault(); e.stopPropagation();
-      selectedColor=b.dataset.color||b.textContent.trim();
-      document.querySelectorAll('#pdColors .pd-color').forEach(function(x){x.classList.toggle('selected',x===b)});
-      sound('tick');
-    };
-  });
-
-  function bindSizes(){
-    document.querySelectorAll('#pdSizes .size-pill').forEach(function(b){
-      b.onclick=function(e){
-        e.preventDefault(); e.stopPropagation();
-        selectedSize=b.dataset.size||b.textContent.trim();
-        document.querySelectorAll('#pdSizes .size-pill').forEach(function(x){x.classList.toggle('selected',x===b)});
-        sound('click');
-      };
-    });
-  }
-  bindSizes();
-
-  var add=$('pdAdd');
-  if(add) add.onclick=function(e){
-    e.preventDefault(); e.stopPropagation();
-    if(!current) return;
-    var it=getProduct();
-    if(typeof window.addToCart==='function') window.addToCart(it,qty);
-    refreshCart(); sound('addToCart'); toast(current.name+' added to cart');
-  };
-
-  var buy=$('pdBuy');
-  if(buy) buy.onclick=function(e){
-    e.preventDefault(); e.stopPropagation();
-    if(!current) return;
-    var it=getProduct();
-    if(typeof window.addToCart==='function') window.addToCart(it,qty);
-    refreshCart(); sound('addToCart');
-    closeDetail();
-    setTimeout(openCart,120);
-  };
-
-  var wish=$('pdWishlist');
-  if(wish) wish.onclick=function(e){
-    e.preventDefault(); e.stopPropagation();
-    if(!current) return;
-    var it=getProduct();
-    window.wishlist=Array.isArray(window.wishlist)?window.wishlist:[];
-    var idx=window.wishlist.findIndex(function(x){return x.id===it.id;});
-    if(idx<0){window.wishlist.push(it);wish.classList.add('liked');sound('wishlist');toast(current.name+' added to wishlist');}
-    else{window.wishlist.splice(idx,1);wish.classList.remove('liked');sound('remove');toast(current.name+' removed from wishlist');}
-    refreshWish();
-  };
-
-  var share=$('pdShare');
-  if(share) share.onclick=function(e){
-    e.preventDefault(); e.stopPropagation();
-    if(!current) return;
-    var url=location.href.split('#')[0]+'#product-'+(current.number||'');
-    var data={title:current.name,text:'Check out '+current.name,url:url};
-    if(navigator.share){
-      navigator.share(data).then(function(){sound('tick')}).catch(function(){});
-    }else if(navigator.clipboard){
-      navigator.clipboard.writeText(url).then(function(){sound('tick');toast('Product link copied');}).catch(function(){toast('Copy this product link: '+url);});
-    }else{toast('Product link: '+url);sound('tick');}
-  };
-
-  var support=$('pdSupport');
-  if(support) support.onclick=function(e){
-    e.preventDefault(); e.stopPropagation();
-    var msg=encodeURIComponent('Hi! I need support for '+(current?current.name:'a product')+'.');
-    window.open('https://wa.me/919707286520?text='+msg,'_blank','noopener');
-    sound('swoosh');
-  };
-
-  var secure=$('pdSecure');
-  if(secure){secure.style.cursor='pointer';secure.onclick=function(){toast('Secure order: your order details are confirmed before sending on WhatsApp.');sound('tick');};}
-  var easy=overlay.querySelector('.pd-info-strip div:last-child');
-  if(easy){easy.style.cursor='pointer';easy.onclick=function(){toast('Easy Order: choose size, colour and quantity, then tap Buy Now.');sound('click');};}
-
-  // Re-bind sizes whenever the detail modal opens, because the size buttons are recreated.
-  var oldOpen=window.__jsawProductDetailOpen;
-  // Observe the modal for newly created size buttons without adding click listeners to them twice.
-  var mo=new MutationObserver(function(muts){
-    var changed=false;
-    muts.forEach(function(m){if(m.addedNodes&&m.addedNodes.length) changed=true;});
-    if(changed) bindSizes();
-  });
-  mo.observe($('pdSizes'),{childList:true});
 })();
+
+// Ripple/click feedback for all interactive buttons.
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button'); if(!b)return;
+  b.classList.remove('ui-click-pop'); void b.offsetWidth; b.classList.add('ui-click-pop');
+});
 </script>
+<style>.ui-click-pop{animation:uiClickPop .18s ease}@keyframes uiClickPop{50%{transform:scale(.97)}100%{transform:scale(1)}}</style>
 
 </body>
 </html>
